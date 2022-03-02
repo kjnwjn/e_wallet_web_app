@@ -175,10 +175,12 @@ class Account extends DB
         };
     }
 
-    public function getActivatedAccount()
+    public function getAccountByActiveStatus($status = 0)
     {
+        // $status = 1 ==> get active account
+        // $status = 0 ==> get pending account
         $conn = $this->conn;
-        $sql = "SELECT * FROM account WHERE active = 1";
+        $sql = "SELECT * FROM account WHERE active = " . $status . "";
         $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
         $row = $result->fetch_all();
         $data = [];

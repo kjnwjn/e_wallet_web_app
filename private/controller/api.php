@@ -310,7 +310,38 @@ class Api extends Controller
                 ]);
                 exit();
             } else {
-                $data = $this->model('Account')->getActivatedAccount();
+                $data = $this->model('Account')->getAccountByActiveStatus(1);
+                echo json_encode([
+                    'status' => true,
+                    'msg' => 'Success.',
+                    'data' => $data,
+                ]);
+                exit();
+            }
+        }
+    }
+
+    function getPendingAccount()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            echo json_encode([
+                'status' => false,
+                'msg' => 'Method not allowed!'
+            ]);
+            exit();
+        } else {
+            // $validCondition = !isset($_SESSION['authenticated']) || $_SESSION['role'] != 'admin';
+            // Cái này kiểm tra phân quyền, chỉ cho phép Admin truy cập
+            // Nhưng do chưa có phân quyền nên tạm thời để như này
+            $validCondition = true;
+            if (!$validCondition) {
+                echo json_encode([
+                    'status' => false,
+                    'msg' => 'Unthorization! You are not allowed to access this endpoint!'
+                ]);
+                exit();
+            } else {
+                $data = $this->model('Account')->getAccountByActiveStatus(0);
                 echo json_encode([
                     'status' => true,
                     'msg' => 'Success.',
