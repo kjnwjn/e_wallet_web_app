@@ -12,7 +12,11 @@ class Api extends Controller
         // khởi tạo đối tượng tèo sử dụng được những hàm từ đối tượng sinhvienmodel
 
         // khời tạo đối tượng sử dụng view của home load ra data là danh sách student 
-        echo json_encode('quan dep trai');
+        echo json_encode([
+            'status' => false,
+            'err' => 404,
+            'msg' => 'This endpoint cannot be found, please contact adminstrator for more information.',
+        ]);
     }
 
     function login()
@@ -282,6 +286,37 @@ class Api extends Controller
                         'redirect' => '../'
                     ]);
                 }
+            }
+        }
+    }
+
+    function getActivatedAccount()
+    {
+        if ($_SERVER['REQUEST_METHOD'] !== 'GET') {
+            echo json_encode([
+                'status' => false,
+                'msg' => 'Method not allowed!'
+            ]);
+            exit();
+        } else {
+            // $validCondition = !isset($_SESSION['authenticated']) || $_SESSION['role'] != 'admin';
+            // Cái này kiểm tra phân quyền, chỉ cho phép Admin truy cập
+            // Nhưng do chưa có phân quyền nên tạm thời để như này
+            $validCondition = true;
+            if (!$validCondition) {
+                echo json_encode([
+                    'status' => false,
+                    'msg' => 'Unthorization! You are not allowed to access this endpoint!'
+                ]);
+                exit();
+            } else {
+                $data = $this->model('Account')->getActivatedAccount();
+                echo json_encode([
+                    'status' => true,
+                    'msg' => 'Success.',
+                    'data' => $data,
+                ]);
+                exit();
             }
         }
     }

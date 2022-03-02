@@ -14,6 +14,7 @@ class Account extends DB
             return false;
         }
     }
+
     public function is_phone_number_exit($phoneNumber)
     {
         $sql = "SELECT * FROM account WHERE phoneNumber = ?";
@@ -27,6 +28,7 @@ class Account extends DB
             return false;
         }
     }
+
     public function login($phoneNumber, $password)
     {
         $sql = "SELECT * FROM account WHERE phoneNumber = " . $phoneNumber . "";
@@ -58,6 +60,7 @@ class Account extends DB
             return true;
         }
     }
+
     public function updateActive($active, $phoneNumber)
     {
         $sql = "UPDATE account SET active = ? WHERE phoneNumber = ?";
@@ -82,6 +85,7 @@ class Account extends DB
             );
         }
     }
+
     public function updatePassword($newPassword, $phoneNumber)
     {
         $sql = "UPDATE account SET password = ? WHERE phoneNumber = ?";
@@ -97,6 +101,7 @@ class Account extends DB
             return false;
         }
     }
+
     public function checkWrongPassword($phoneNumber)
     {
         $sql = "SELECT * FROM account WHERE phoneNumber = " . $phoneNumber . "";
@@ -108,6 +113,7 @@ class Account extends DB
             return false;
         }
     }
+
     public function updateWrongPassword($wrongpassword, $phoneNumber)
     {
         $sql = "UPDATE account SET wrongpassword = ? WHERE phoneNumber = ?";
@@ -123,6 +129,7 @@ class Account extends DB
             return false;
         }
     }
+
     public function checkAbnormal($phoneNumber)
     {
         $sql = "SELECT * FROM account WHERE phoneNumber = " . $phoneNumber . "";
@@ -134,6 +141,7 @@ class Account extends DB
             return false;
         }
     }
+
     public function updateAbnormal($abnormal, $phoneNumber)
     {
         $sql = "UPDATE account SET abnormal = ? WHERE phoneNumber = ?";
@@ -165,5 +173,32 @@ class Account extends DB
         } catch (Exception $e) {
             return false;
         };
+    }
+
+    public function getActivatedAccount()
+    {
+        $conn = $this->conn;
+        $sql = "SELECT * FROM account WHERE active = 1";
+        $result = mysqli_query($conn, $sql) or die(mysqli_error($conn));
+        $row = $result->fetch_all();
+        $data = [];
+        foreach ($row as $cell) {
+            array_push($data, array(
+                'fullname' => $cell[3],
+                'email' => $cell[0],
+                'phoneNumber' => $cell[1],
+                'address' => $cell[4],
+                'dateOfBirth' => $cell[5],
+                'idCard1' => $cell[6],
+                'idCard2' => $cell[7],
+                'active' => $cell[11],
+                'wrongPasswordCount' => $cell[12],
+                'obnormal' => $cell[13],
+                'createdAt' => $cell[8],
+                'updatedAt' => $cell[9],
+                'deleted' => $cell[10],
+            ));
+        }
+        return $data;
     }
 }
