@@ -1,1 +1,0 @@
-<!-- <?php require_once('./private/view/pages/' . $data['page'] . '.php'); ?> -->

@@ -1,12 +1,12 @@
 <?php
 
-class News extends Controller
+class About extends Controller
 {
     function default()
     {
         $this->view('Layout', array(
-            'title' => 'News',
-            'page' => 'news'
+            'title' => 'About',
+            'page' => 'about'
         ));
     }
 }

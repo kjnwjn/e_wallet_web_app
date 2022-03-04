@@ -1,1 +1,0 @@
-<!-- lịch sử giao dịch -->
