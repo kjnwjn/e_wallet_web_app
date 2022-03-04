@@ -5,7 +5,7 @@ class DB
     private $host = 'localhost';
     private $username = 'root';
     private $password = '';
-    private $dbname = 'test';
+    private $dbname = 'project_database';
 
     function __construct()
     {

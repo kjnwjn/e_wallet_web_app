@@ -1,5 +1,6 @@
 <?php
 require_once('./private/apis/Account.api.php');
+require_once('./private/apis/Card.api.php');
 
 class Api extends Controller
 {
@@ -16,5 +17,10 @@ class Api extends Controller
     function account($route = "", $param = "")
     {
         new AccountApi($route, $param);
+    }
+
+    function card($route = "", $param = "")
+    {
+        new CardApi($route, $param);
     }
 }

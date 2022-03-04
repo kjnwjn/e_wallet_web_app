@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 04, 2022 at 06:44 PM
+-- Generation Time: Mar 04, 2022 at 07:37 PM
 -- Server version: 10.4.22-MariaDB
 -- PHP Version: 8.0.14
 
@@ -55,6 +55,29 @@ CREATE TABLE IF NOT EXISTS `account` (
 
 INSERT INTO `account` (`email`, `phoneNumber`, `fullname`, `gender`, `address`, `birthday`, `idCard_front`, `idCard_back`, `password`, `initialPassword`, `wrongPassCount`, `deleted`, `active`, `role`, `createdAt`, `updatedAt`) VALUES
 ('truonggiangit793@gmail.com', '0702907154', 'Phạm Trường Giang', 'Male', '793/49/3 Trần Xuân Soạn, Tân Hưng, Quận 7, HCM', '986213568000', 'http://localhost/public/assest/img/uploads/bf2fb4c8ff7e99592437_AnyConv.com%2032690b7c2eb039d076c73cadaeb27a8c.png', 'http://localhost/public/assest/img/uploads/bf2fb4c8ff7e99592437_AnyConv.com%2032690b7c2eb039d076c73cadaeb27a8c.png', '$2y$10$87q6YIRspzNxDeGCeXp9v.VTDMeL.STqRH7lVjD5/quv4xihpxBAC', 'NULL', 0, 0, 0, 'pending', '1646324757', '1646409143');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `card`
+--
+
+CREATE TABLE IF NOT EXISTS `card` (
+  `card_id` int(255) NOT NULL,
+  `expiredDay` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `cvv` int(255) NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`card_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `card`
+--
+
+INSERT INTO `card` (`card_id`, `expiredDay`, `cvv`, `description`) VALUES
+(111111, '10/10/2022', 411, 'Không giới hạn số lần nạp và số tiền mỗi lần nạp.'),
+(222222, '11/11/2022', 443, 'Không giới hạn số lần nạp nhưng chỉ được nạp tối đa 1 triệu/lần.'),
+(333333, '12/12/2022', 577, 'Khi nạp bằng thẻ này thì luôn nhận được thông báo là “thẻ hết tiền”.');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
