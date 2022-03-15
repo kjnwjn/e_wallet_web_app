@@ -48,6 +48,7 @@ class ApiMiddleware
                 "header_status_code" => 401,
                 'msg' => 'Unauthorized. Permission dennied.'
             ));
+            
         }
     }
 

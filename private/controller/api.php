@@ -1,6 +1,7 @@
 <?php
 require_once('./private/apis/Account.api.php');
 require_once('./private/apis/Card.api.php');
+require_once('./private/apis/Service.api.php');
 
 class Api extends Controller
 {
@@ -22,5 +23,9 @@ class Api extends Controller
     function card($route = "", $param = "")
     {
         new CardApi($route, $param);
+    }
+    function service($route = "", $param = "")
+    {
+        new ServiceApi($route, $param);
     }
 }

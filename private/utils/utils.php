@@ -56,6 +56,14 @@ class Util
                     return $key . ' must be a valid email';
                 }
             }
+            if (isset($value['is_number']) && $value['is_number']) {
+                if (isset($body[$key])) {
+                    $validNumber = is_numeric($body[$key]);
+                    if (!$validNumber) {
+                        return $key . ' must be a number.';
+                    }
+                }
+            }
             if (isset($value['min'])) {
                 if (!isset($body[$key]) || $value['min'] > strlen($body[$key])) {
                     return $key . ' must be at least ' . $value['min'] . ($value['min'] > 1 ? ' characters.' : ' character.');
@@ -92,6 +100,15 @@ class Util
                     }
                 }
             }
+            if(isset($value['match']) && $value['match']) {
+                if (isset($body[$key])) {
+                    $matched = $body[$key] === $body[$value['match']];
+                    if (!$matched) {
+                        return $key . ' must be matched with ' . $value['match'] ;
+                    }
+                }
+            }
+
         }
     }
 

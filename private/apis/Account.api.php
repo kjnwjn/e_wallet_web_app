@@ -18,7 +18,7 @@ class AccountApi extends Controller
             case 'login':
                 $this->middleware->request_method('post');
                 $payload = $this->middleware->jwt_get_payload();
-                !$payload ? $this->login() : $this->middleware->json_send_response(404, array(
+                !$payload ? $this->login() : $this->middleware->json_send_response(200, array(
                     'status' => false,
                     'msg' => 'You logged in before.',
                     'redirect' => getenv('BASE_URL'),
@@ -51,6 +51,17 @@ class AccountApi extends Controller
                 $this->middleware->request_method('post');
                 $this->middleware->authentication();
                 $this->hashedVerify();
+                break;
+            case 'profile':
+                $this->middleware->authentication();
+                $payload = $this->middleware->jwt_get_payload();
+                $this->userProfile($payload);
+                break;
+            case 'change-password':
+                $this->middleware->request_method('post');
+                $this->middleware->authentication();
+                $payload = $this->middleware->jwt_get_payload();
+                $this->changePassword($payload);
                 break;
             default:
                 $this->middleware->json_send_response(404, array(
@@ -354,9 +365,71 @@ class AccountApi extends Controller
 
         // Send response
         $this->middleware->json_send_response(200, array(
-            'status' => false,
+            'status' => true,
             'msg' => 'Your account has been setup password successfully!',
             'redirect' => getenv('BASE_URL')
         ));
+    }
+
+    
+    function userProfile($payload){
+        $userInfor = $this->model('Account')->SELECT_ONE('email',$payload->email);
+        // var_dump($userInfor);
+        try{
+            $this->middleware->json_send_response(200, array(
+                'status' => true,
+                'msg' => 'Get user information successfully!',
+                'response' => array(
+                    'email' =>  $userInfor['email'],
+                    'phoneNumber' => $userInfor['phoneNumber'],
+                    'fullname' => $userInfor['fullname'],
+                    'address' => $userInfor['address'],
+                    'birthday' => $userInfor['birthday'],
+                    'idCard_back' => $userInfor['idCard_back'],
+                    'idCard_front' => $userInfor['idCard_front'],
+                    'wallet' => $userInfor['wallet']
+                )
+            ));
+        }catch(Exception $e){
+            $this->middleware->error_handler();
+        }
+    }
+
+    function changePassword($payload){
+
+        $bodyDataErr = $this->utils()->validateBody(($_POST), array(
+            'oldPassword' => array(
+                'required' => true,
+                'min' => 6,
+            ),
+            'newPassword' => array(
+                'required' => true,
+                'min' => 6,
+            ), 
+            'confirmPassword' => array(
+                'required' => true,
+                'min' => 6,
+                'match' => 'newPassword'
+            ),
+        ));
+        $bodyDataErr ? $this->middleware->error_handler(200, $bodyDataErr) : null;
+        
+        $userInfor = $this->model('Account')->SELECT_ONE('email', $payload->email);
+        if(password_verify($_POST['oldPassword'], $userInfor['password'])){
+
+            $isSuccess = $this->model('Account')->UPDATE_ONE(array('email' => $userInfor['email']), array('password' => password_hash($_POST['newPassword'],PASSWORD_DEFAULT))) ;
+            !$isSuccess ? $this->middleware->error_handler() 
+            : $this->middleware->json_send_response(200, array(
+                'status' => true,
+                'msg' => 'Update password successfully!',
+                )
+            );
+        }else{
+            $this->middleware->json_send_response(200, array(
+                'status' => false,
+                'msg' => 'Old password incorrect!',
+                )
+            );
+        }
     }
 }

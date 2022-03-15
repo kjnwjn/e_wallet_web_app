@@ -2,6 +2,7 @@
 
 class About extends Controller
 {
+    protected $middleware;
     function default()
     {
         $this->view('Layout', array(
