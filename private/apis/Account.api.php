@@ -63,6 +63,11 @@ class AccountApi extends Controller
                 $payload = $this->middleware->jwt_get_payload();
                 $this->changePassword($payload);
                 break;
+            case 'user-details':
+                $this->middleware->request_method('get');
+                $this->middleware->authentication();
+                $this->userDetails($param);
+                break;
             default:
                 $this->middleware->json_send_response(404, array(
                     'status' => false,
@@ -270,17 +275,18 @@ class AccountApi extends Controller
 
         // Start to send an email
         $initialPassword = $this->utils()->generateRandomString();
+        
         $sendMailStatus = $this->utils()->sendMail(array(
             "email" => $_POST['email'],
             'title' => 'Acount detail for KiWi App',
-            'content' => `
+            'content' => '
                 <body>
                     <p>Thank you for your registering on our application! 
                     Now you can login to your account via follow information below:</p>
-                    <p><strong>Phone number: ` . $_POST['phoneNumber'] . `</strong></p>
-                    <p><strong>Password: ` . $initialPassword . `</strong></p>
+                    <p><strong>Phone number: ' . $_POST['phoneNumber'] . '</strong></p>
+                    <p><strong>Password: ' . $initialPassword . '</strong></p>
                 </body>
-            `,
+            ',
         ));
 
         // Start to insert to database
@@ -304,7 +310,7 @@ class AccountApi extends Controller
                 'status' => true,
                 'header_status_code' => 200,
                 'msg' => 'Register account successfully! We have sent an email that contain your information to login, check it now!',
-                'redirect' => getenv('BASE_URL') + 'login'
+                'redirect' => getenv('BASE_URL') . 'login'
             ));
         } else {
             $this->middleware->json_send_response(500, array(
@@ -393,6 +399,26 @@ class AccountApi extends Controller
         }catch(Exception $e){
             $this->middleware->error_handler();
         }
+    }
+    function userDetails($param){
+        $payload = $this->middleware->jwt_get_payload();
+        $userDetails = !$param ? $this->middleware->error_handler(200,'Phone Number is required!') 
+        : $this->model('account')->SELECT_ONE('phoneNumber',$param);
+        ($userDetails && ($userDetails['phoneNumber'] != $payload->phoneNumber)) ? $this->middleware->json_send_response(200, array(
+            'status' => true,
+            'msg' => 'Get user information successfully!',
+            'response' => array(
+                'email' =>  $userDetails['email'],
+                'phoneNumber' => $userDetails['phoneNumber'],
+                'fullname' => $userDetails['fullname'],
+                'address' => $userDetails['address'],
+                'birthday' => $userDetails['birthday'],
+                'idCard_back' => $userDetails['idCard_back'],
+                'idCard_front' => $userDetails['idCard_front'],
+                'wallet' => $userDetails['wallet']
+            )
+        )) : $this->middleware->error_handler(404,'User not found!');
+
     }
 
     function changePassword($payload){

@@ -19,6 +19,16 @@ class Util
         }
         return $randomString;
     }
+    function generateRandomInt($length = 6)
+    {
+        $characters = '0123456789';
+        $charactersLength = strlen($characters);
+        $randomInt = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomInt .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomInt;
+    }
 
     function sendMail($data = [])
     {
@@ -173,4 +183,5 @@ class Util
         }
         return $result;
     }
+
 }

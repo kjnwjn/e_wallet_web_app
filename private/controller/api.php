@@ -24,7 +24,13 @@ class Api extends Controller
     {
         new CardApi($route, $param);
     }
+
     function service($route = "", $param = "")
+    {
+        new ServiceApi($route, $param);
+    }
+
+    function transactionHistory($route = "", $param = "")
     {
         new ServiceApi($route, $param);
     }

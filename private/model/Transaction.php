@@ -1,9 +1,9 @@
 <?php
-class Card extends DB
+class Transaction extends DB
 {
     function SELECT_ONE($condition = '', $conditionValue = '')
     {
-        $sql = 'SELECT * from `card` WHERE ' . $condition . ' = "' . $conditionValue . '"';
+        $sql = 'SELECT * from `transaction` WHERE ' . $condition . ' = "' . $conditionValue . '"';
         $stmt = $this->conn->query($sql);
         $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
@@ -11,7 +11,7 @@ class Card extends DB
 
     function SELECT_ALL()
     {
-        $sql = 'SELECT * from `card`';
+        $sql = 'SELECT * from `transaction`';
         $stmt = $this->conn->query($sql);
         $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
@@ -30,8 +30,11 @@ class Card extends DB
         $field_name = implode(',', $key_field);
 
         try {
-            $sql = 'INSERT INTO card (' . $field_name . ') VALUES (' . $value . ')';
+            $sql = 'INSERT INTO transaction (' . $field_name . ') VALUES (' . $value . ')';
             $stmt = $this->conn->prepare($sql);
+            if(!$stmt){
+                echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
+             }
             $stmt->execute();
             return true;
         } catch (Exception $e) {
@@ -48,10 +51,13 @@ class Card extends DB
             $conditionValue = $conditions[$conditionName];
             $toUpdateName = array_keys($toUpdate)[0];
             $newValue = $toUpdate[$toUpdateName];
-            $sql = 'UPDATE card SET ' . $toUpdateName . ' = "' . $newValue . '" WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE transaction SET ' . $toUpdateName . ' = "' . $newValue . '" WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
             $stmt = $this->conn->prepare($sql);
+            if(!$stmt){
+                echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
+             }
             $stmt->execute();
-            $sql = 'UPDATE card SET updatedAt = ' . time() . ' WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE transaction SET updatedAt = ' . time() . ' WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
             $stmt = $this->conn->prepare($sql);
             $stmt->execute();
             return true;
