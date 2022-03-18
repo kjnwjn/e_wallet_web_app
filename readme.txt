@@ -1,7 +1,10 @@
 loại giao dịch
-1 : nạp tiền 
-2 : chuyển tiền
-3 : rút tiền
+1 : nạp tiền (recharge)
+2 : chuyển tiền (transfer)
+3 : rút tiền (withdraw)
 4 : mua thẻ điện thoại
 
-recharge : nap tiền
+recharge : nap tiền => done!
+transfer: xử lí admin confirm những transaction có action = 0 hoặc null;
+
+

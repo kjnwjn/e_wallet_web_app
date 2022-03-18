@@ -9,6 +9,14 @@ class Transaction extends DB
         return $result ? $result : array();
     }
 
+    function SELECT($condition = '', $conditionValue = '')
+    {
+        $sql = 'SELECT * from `transaction` WHERE ' . $condition . ' = "' . $conditionValue . '"';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
+
     function SELECT_ALL()
     {
         $sql = 'SELECT * from `transaction`';

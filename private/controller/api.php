@@ -2,6 +2,8 @@
 require_once('./private/apis/Account.api.php');
 require_once('./private/apis/Card.api.php');
 require_once('./private/apis/Service.api.php');
+require_once('./private/apis/Transaction.api.php');
+require_once('./private/apis/Admin.api.php');
 
 class Api extends Controller
 {
@@ -30,8 +32,14 @@ class Api extends Controller
         new ServiceApi($route, $param);
     }
 
-    function transactionHistory($route = "", $param = "")
+    function transaction($route = "", $param = "")
     {
-        new ServiceApi($route, $param);
+        new transactionApi($route, $param);
     }
+
+    function admin($route = "", $param = "")
+    {
+        new AdminApi($route, $param);
+    }
+
 }
