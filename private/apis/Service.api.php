@@ -597,7 +597,7 @@ class ServiceApi extends Controller
         ? $this->middleware->error_handler(200,'Your account does not have enough money to purchase!')
         : null;
         $arrayPhoneCardCode = [];
-       
+        
         switch (strtolower($_POST['MNO'])){
             case 'viettel': 
                 for( $i=0; $i<$amount; $i++){
@@ -620,7 +620,9 @@ class ServiceApi extends Controller
             default : 
                 $this->middleware->error_handler(200,'Mobie Network Operater not available');
         }
-        
+        if($arrayPhoneCardCode){
+                
+        }
 
         
 
