@@ -41,6 +41,12 @@ class ServiceApi extends Controller
                 $payload = $this->middleware->jwt_get_payload();
                 $this->confirmOTP($payload);
                 break;
+            case 'buyPhoneCards':
+                $this->middleware->request_method('post');
+                $this->middleware->authentication();
+                $payload = $this->middleware->jwt_get_payload();
+                $this->buyPhoneCards($payload);
+                break;
             default:
                 $this->middleware->json_send_response(404, array(
                     'status' => false,
@@ -438,4 +444,38 @@ class ServiceApi extends Controller
         }
     }
     
+
+    function buyPhoneCards($payload){
+        $bodyDataErr = $this->utils()->validateBody(($_POST), array(
+            'MNO' => array(
+                'required' => true,
+            ),
+            'phoneCardType' => array(
+                'required' => true,
+                'is_number' => true,
+            ),
+            'amount' => array(
+                'required' => true,
+                'is_number' => true,
+            ),
+            
+        ));
+        $bodyDataErr ? $this->middleware->error_handler(200, $bodyDataErr) : null;
+
+
+        switch (strtolower($_POST['MNO'])){
+            case 'viettel': 
+                $phoneCardCode = '11111' . $this->utils()->generateRandomInt(5);
+                break;
+            case 'mobifone': 
+                $phoneCardCode = '22222' . $this->utils()->generateRandomInt(5);
+                break;
+            case 'vinaphone': 
+                $phoneCardCode = '33333' . $this->utils()->generateRandomInt(5);
+                break;
+            default : 
+                $this->middleware->error_handler(200,'Mobie Network Operater not available');
+        }
+
+    }
 }
