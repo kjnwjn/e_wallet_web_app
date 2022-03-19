@@ -47,6 +47,12 @@ class ServiceApi extends Controller
                 $payload = $this->middleware->jwt_get_payload();
                 $this->buyPhoneCards($payload);
                 break;
+            case 'test' : 
+                $this->middleware->request_method('post');
+                $this->middleware->authentication();
+                $payload = $this->middleware->jwt_get_payload();
+                $this->test($payload);
+                break;
             default:
                 $this->middleware->json_send_response(404, array(
                     'status' => false,
@@ -359,7 +365,7 @@ class ServiceApi extends Controller
             $totalForRecipient =  $_SESSION['transactionPrepare']['totalForUser'];
             $recipient = $this->model('account')->SELECT_ONE('phoneNumber',$phoneRecipient);
             $userInfor = $this->model('account')->SELECT_ONE('phoneNumber',$payload->phoneNumber);
-        
+            
         
             if(isset($time_expire) && time() > $time_expire) {
                 unset($_SESSION['transactionPrepare']);
@@ -373,6 +379,7 @@ class ServiceApi extends Controller
                 !($_POST['otpValue'] ==  $OTP) 
                 ? $this->middleware->error_handler(200,'Invalid OTP! Please try again.') 
                 : null;
+                $createdAt = time() + 15;
                 $inserted = $this->model('Transaction')->INSERT(array(
                     'transaction_id' => $transaction_id,
                     'email' =>  $email,
@@ -381,7 +388,7 @@ class ServiceApi extends Controller
                     'value_money' => $value_money,
                     'description'=> $description,
                     'costBearer' => $costBearer,
-                    'createdAt' => time(),
+                    'createdAt' => $createdAt,
                     'updatedAt' => time(),
                     'action' => $action,
                     
@@ -400,22 +407,135 @@ class ServiceApi extends Controller
                         $isUpdateWalletUser = $this->model('account')->UPDATE_ONE(array('phoneNumber' =>$phoneRecipient),array('wallet'=>$recipient['wallet'] + $totalForRecipient));   
                         unset($_SESSION['transactionPrepare']);
                         if($isUpdateWalletUser && $isUpdateWalletUser) {
-                            // $sendMailStatus = $this->utils()->sendMail(array(
-                            //     "email" => $userInfor['email'],
-                            //     'title' => 'OTP code for transfer transaction',
-                            //     'content' => '
-                            //         <body>
-                            //             <p>Here is your OTP code to confirm the transaction (money transfer) from your card</p>
-                            //             <p>Please do not send this OTP code for anyone</p>
-                            //             <p><strong>OTP code: ' . $OTP . '</strong></p>
-                            //         </body>
-                            //     ',
-                            // ));
-                             $this->middleware->json_send_response(200, array(
+                            $this->utils()->sendMail(array(
+                                "email" => $userInfor['email'],
+                                'title' => 'Payment recevie',
+                                'content' => '
+                                    <body style ="background-color: honeydew;">
+                                    <h1 
+                                    style="
+                                    text-align: center;
+                                    margin-top: 80px;
+                                    margin-bottom: 20px">PAYMENT RECEIPT</h1>
+                                    <div class="container" style = " 
+                                        margin: 0 auto;
+                                        position: relative;
+                                        ">
+                                        <table style=" 
+                                            text-align: center;
+                                            margin: 0 auto;
+                                            border: 1px dashed rgb(8, 8, 8);
+                                            border-collapse: collapse;
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;
+                                            ">
+                                            <tr>
+                                                <th class="first_row firt_col" style= " 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;
+                                                ">Transaction Date,time</th>
+                                                <td class="first_row" style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;"
+                                                >'.date('Y-m-d H:i:s',$createdAt).'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th style = " border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">Transaction ID </th>
+                                                <td>'. $transaction_id .'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th class="firt_col"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">From</th>
+                                                <td class="lab"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'.$userInfor['fullname'].'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th class="firt_col"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">To</th>
+                                                <td  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'.$recipient['fullname'].'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th class="firt_col"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">Amount</th>
+                                                <td  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'.$value_money.'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th class="firt_col"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">Cost Bearder</th>
+                                                <td  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'.$costBearer.'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th class="firt_col"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">Charge amount</th>
+                                                <td  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'. $value_money * 0.05 .'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">Description</th>
+                                                <td  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'. $description .'</td>
+                                            </tr>
+                                            <tr style=" 
+                                            border: 1px solid rgb(8, 7, 7);
+                                            padding: 5px;">
+                                                <th class="firt_col"  style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">Account balance</th>
+                                                <td   style=" 
+                                                border: 1px solid rgb(8, 7, 7);
+                                                padding: 5px;">'. $userInfor['wallet'] .'</td>
+                                            </tr>
+                                        </table>
+                                        <p><strong>Thank you for banking with KIWI e-wallet</strong></p>
+                                        <p>This confirmation is not a commitment regarding customer"s obligation with thỉrd party  </p>
+                                        <p>To ensure safety and security as well as to protect your rights and benefits, when making transactions via e-wallet
+                                        please read carefully and follow transaction instructions here.</p>
+                                    </body>
+                                ',
+                            ))
+                            ?
+                            $this->middleware->json_send_response(200, array(
                                 'status' => true,
                                 'header_status_code' => 200,
                                 'msg' => 'Transfer money successfully!',
                                 'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+                            ))
+                            : $this->middleware->json_send_response(500, array(
+                                'status' => false,
+                                'header_status_code' => 500,
+                                'debug' => 'Service API function confirmOTP',
+                                'msg' => 'An error occurred while processing, please try again!'
                             ));
                         }else{
                             $this->middleware->json_send_response(500, array(
@@ -446,6 +566,7 @@ class ServiceApi extends Controller
     
 
     function buyPhoneCards($payload){
+        $userInfor = $this->model('account')->SELECT_ONE('email',$payload->email);
         $bodyDataErr = $this->utils()->validateBody(($_POST), array(
             'MNO' => array(
                 'required' => true,
@@ -462,20 +583,56 @@ class ServiceApi extends Controller
         ));
         $bodyDataErr ? $this->middleware->error_handler(200, $bodyDataErr) : null;
 
+        ($_POST['phoneCardType'] != 10000 && $_POST['phoneCardType'] != 20000  && $_POST['phoneCardType'] != 50000 && $_POST['phoneCardType'] != 100000) 
+        ? $this->middleware->error_handler(200, 'phone Card type is invalid') 
+        : null;
 
+        ($_POST['amount'] >5 || $_POST['amount'] <1) 
+        ? $this->middleware->error_handler(200, 'Amount is invalid') 
+        : null;
+
+        $total =$_POST['phoneCardType'] * $_POST['amount'];
+        $amount = $_POST['amount'];
+        ($userInfor['wallet']< $total) 
+        ? $this->middleware->error_handler(200,'Your account does not have enough money to purchase!')
+        : null;
+        $arrayPhoneCardCode = [];
+       
         switch (strtolower($_POST['MNO'])){
             case 'viettel': 
-                $phoneCardCode = '11111' . $this->utils()->generateRandomInt(5);
+                for( $i=0; $i<$amount; $i++){
+                    $phoneCardCode = '11111' . $this->utils()->generateRandomInt(5);
+                    array_push($arrayPhoneCardCode,$phoneCardCode);
+                };
                 break;
             case 'mobifone': 
-                $phoneCardCode = '22222' . $this->utils()->generateRandomInt(5);
+                for( $i=0; $i<$amount; $i++){
+                    $phoneCardCode = '22222' . $this->utils()->generateRandomInt(5);
+                    array_push($arrayPhoneCardCode,$phoneCardCode);
+                };
                 break;
             case 'vinaphone': 
-                $phoneCardCode = '33333' . $this->utils()->generateRandomInt(5);
+                for( $i=0; $i<$amount; $i++){
+                    $phoneCardCode = '33333' . $this->utils()->generateRandomInt(5);
+                    array_push($arrayPhoneCardCode,$phoneCardCode);
+                };
                 break;
             default : 
                 $this->middleware->error_handler(200,'Mobie Network Operater not available');
         }
+        
 
+        
+
+
+    }
+
+    function test($payload){
+        $abc = $this->model('transaction')->
+        SELECT_INNER_JOIN(array(
+            'account.fullname'),
+            'account','transaction.email = account.email and transaction_id = 204883');
+        
+        print_r($abc);
     }
 }

@@ -26,11 +26,14 @@ class Account extends DB
 
     function SELECT_ONE($condition = '', $conditionValue = '')
     {
+        
         $sql = 'SELECT * from account WHERE ' . $condition . ' = "' . $conditionValue . '"';
         $stmt = $this->conn->query($sql);
         $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
+    
+
 
     function SELECT_ALL()
     {

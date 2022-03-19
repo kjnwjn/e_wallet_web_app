@@ -16,6 +16,21 @@ class Transaction extends DB
         $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
+    function SELECT_INNER_JOIN($column = [],$table = '',$condition ='')
+    {
+        $value_field = [];
+
+        foreach ($column as $key => $value) {
+            array_push($value_field, $value );
+
+        }
+        
+        $value = implode(',', $value_field);
+        $sql = 'SELECT '. $value.' from transaction INNER JOIN '. $table .' ON ' .$condition . '';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
 
     function SELECT_ALL()
     {
