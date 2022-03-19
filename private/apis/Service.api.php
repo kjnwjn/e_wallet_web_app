@@ -568,7 +568,7 @@ class ServiceApi extends Controller
     function buyPhoneCards($payload){
         $userInfor = $this->model('account')->SELECT_ONE('email',$payload->email);
         $bodyDataErr = $this->utils()->validateBody(($_POST), array(
-            'MNO' => array(
+            'mno' => array(
                 'required' => true,
             ),
             'phoneCardType' => array(
@@ -598,7 +598,7 @@ class ServiceApi extends Controller
         : null;
         $arrayPhoneCardCode = [];
         
-        switch (strtolower($_POST['MNO'])){
+        switch (strtolower($_POST['mno'])){
             case 'viettel': 
                 for( $i=0; $i<$amount; $i++){
                     $phoneCardCode = '11111' . $this->utils()->generateRandomInt(5);
@@ -620,8 +620,54 @@ class ServiceApi extends Controller
             default : 
                 $this->middleware->error_handler(200,'Mobie Network Operater not available');
         }
-        if($arrayPhoneCardCode){
-                
+        $mno = $_POST['mno'];
+        $phoneCardType = $_POST['phoneCardType'];
+        $transaction_id = $this->utils()->generateRandomInt(6);
+        if($arrayPhoneCardCode && $transaction_id){
+            $inserted = $this->model('transaction')->INSERT(array(
+                'email' => $userInfor['email'],
+                'transaction_id ' => $transaction_id,
+                'type_transaction' => 4,
+                'value_money' => $total,
+                'createdAt' => time(),
+                'updatedAt' => time(),
+            ));
+            !$inserted ?$this->middleware->json_send_response(500, array(
+                'status' => false,
+                'header_status_code' => 500,
+                'debug' => 'Service API function buyPhoneCard(insert)',
+                'msg' => 'An error occurred while processing, please try again!'
+            )): null;
+            foreach($arrayPhoneCardCode as $key => $value){
+                $inserted = $this->model('phonecard')->INSERT(array(
+                    'phoneCard_id ' => $arrayPhoneCardCode[$key],
+                    'transaction_id ' => $transaction_id,
+                    'mno' => $mno,
+                    'phoneCardType' => $phoneCardType,
+                    'amount' => $amount,
+                    'createdAt' => time(),
+                    'updatedAt' => time(),
+                ));
+                !$inserted ?$this->middleware->json_send_response(500, array(
+                    'status' => false,
+                    'header_status_code' => 500,
+                    'debug' => 'Service API function buyPhoneCard(insert)',
+                    'msg' => 'An error occurred while processing, please try again!'
+                )): null;
+            }
+            !$this->model('Account')->UPDATE_ONE(array('email' => $userInfor['email']), array('wallet' => $userInfor['wallet'] - $total)) 
+            ? $this->middleware->json_send_response(500, array(
+                'status' => false,
+                'header_status_code' => 500,
+                'debug' => 'Service API function buyPhoneCard(update)',
+                'msg' => 'An error occurred while processing, please try again!'
+            )):  $this->middleware->json_send_response(200, array(
+                'status' => true,
+                'header_status_code' => 200,
+                'msg' => 'Transfer money successfully!',
+                'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+            ));
+
         }
 
         
