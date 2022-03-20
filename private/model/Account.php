@@ -33,13 +33,19 @@ class Account extends DB
         return $result ? $result : array();
     }
     
-
+    function SELECT($condition = '', $conditionValue = '')
+    {
+        $sql = 'SELECT * from `account` WHERE ' . $condition . ' = "' . $conditionValue . '"';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
 
     function SELECT_ALL()
     {
         $sql = 'SELECT * from account';
         $stmt = $this->conn->query($sql);
-        $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
 

@@ -61,7 +61,6 @@ class ServiceApi extends Controller
                 ));
         }
     }
-
  
     function recharge($payload){
         $bodyDataErr = $this->utils()->validateBody(($_POST), array(
@@ -142,8 +141,6 @@ class ServiceApi extends Controller
         
     }
 
-    
-
     function transfer($payload){
         $bodyDataErr = $this->utils()->validateBody(($_POST), array(
             'phoneRecipient' => array(
@@ -187,7 +184,7 @@ class ServiceApi extends Controller
         $value_money = $_POST['money'];
         $description = $_POST['note'];
         $OTP = $this->utils()->generateRandomInt();
-        $action = ($_POST['money'] > 5000000) ? null : 1;
+        $action = ($_POST['money'] > 5000000) ? 0 : 1;
         $sendMailStatus = $this->utils()->sendMail(array(
             "email" => $userInfor['email'],
             'title' => 'OTP code for transfer transaction',
@@ -296,7 +293,7 @@ class ServiceApi extends Controller
             $email = $userInfor['email'];
             $type_transaction = 3;
             $description = $_POST['description'];
-            $action = ($_POST['money'] > 5000000) ? null : 1;
+            $action = ($_POST['money'] > 5000000) ? 0 : 1;
             $inserted = $this->model('Transaction')->INSERT(array(
                 'transaction_id' => $transaction_id,
                 'email' =>  $email,
@@ -564,7 +561,6 @@ class ServiceApi extends Controller
         }
     }
     
-
     function buyPhoneCards($payload){
         $userInfor = $this->model('account')->SELECT_ONE('email',$payload->email);
         $bodyDataErr = $this->utils()->validateBody(($_POST), array(

@@ -16,6 +16,13 @@ class Card extends DB
         $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
+    function SELECT($condition = '', $conditionValue = '')
+    {
+        $sql = 'SELECT * from `card` WHERE ' . $condition . ' = "' . $conditionValue . '"';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
     function INSERT($field = [])
     {
         $key_field = [];

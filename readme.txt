@@ -6,7 +6,12 @@ loại giao dịch
 
 
 MNO(mobie network operator) => nhà mạng
-recharge : nap tiền => done!
-transfer: xử lí admin confirm những transaction có action = 0 hoặc null;
 
+
+
+Chọn loại tài khoản :
++ Đang chờ kích hoạt 
++ Đã kích hoạt
++ Bị vô hiệu hóa
++ Đang bị khóa vô thời hạn
 
