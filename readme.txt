@@ -10,8 +10,8 @@ MNO(mobie network operator) => nhà mạng
 
 
 Chọn loại tài khoản :
-+ Đang chờ kích hoạt 
-+ Đã kích hoạt
-+ Bị vô hiệu hóa
-+ Đang bị khóa vô thời hạn
++ Đang chờ kích hoạt : pending
++ Đã kích hoạt : activated
++ Bị vô hiệu hóa : disabled
++ Đang bị khóa vô thời hạn : blocked
 

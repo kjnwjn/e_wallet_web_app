@@ -12,30 +12,33 @@ class AdminApi extends Controller
     function __construct($route, $param)
     {
         $this->middleware = new ApiMiddleware();
+        // $this->middleware->authentication();
+        // $payload = $this->middleware->jwt_get_payload();
+        // !($payload) ? 
+        // $this->middleware->json_send_response(200, array(
+        //     'status' => false,
+        //     "header_status_code" => 200,
+        //     'msg' => 'Please login first!',
+        //     'redirect' => getenv('BASE_URL') . 'login',
+        // )) : null;
+        // !($payload->phoneNumber == 'admin')? 
+        // $this->middleware->json_send_response(404, array(
+        //     'status' => false,
+        //     "header_status_code" => 404,
+        //     'msg' => 'This account does not have permission!!'
+        // )) : null;
         switch ($route) {
             case 'list-account':
                 $this->middleware->request_method('get');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
-                !($payload && $payload->phoneNumber == 'admin') ? 
-                $this->middleware->json_send_response(404, array(
-                    'status' => false,
-                    "header_status_code" => 404,
-                    'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
-                )) : null;
                 $this->listAccount($param);
                 break;
             case 'list-transaction-confirm':
                 $this->middleware->request_method('get');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
-                !($payload && $payload->phoneNumber == 'admin') ? 
-                $this->middleware->json_send_response(404, array(
-                    'status' => false,
-                    "header_status_code" => 404,
-                    'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
-                )) : null;
                 $this->listTransConfirm($param);
+                break;
+            case 'user-details':
+                $this->middleware->request_method('get');
+                $this->userDetails($param);
                 break;
             default:
                 $this->middleware->json_send_response(404, array(
@@ -50,28 +53,68 @@ class AdminApi extends Controller
         switch($param){
             case 'pending' : 
                 $accountPending =$this->model('Account')->SELECT('role', 'pending');
-                print_r($accountPending);
+                !$accountPending ?   $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any account pending!'
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $accountPending,
+                ));
                 break;
             case 'actived' :
                 $accountActived =$this->model('Account')->SELECT('role', 'actived');
-                print_r($accountActived);
+                !$accountActived ?   $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any account actived!',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $accountActived,
+                ));
                 break;
             case 'disabled':
                 $accountDisabled =$this->model('Account')->SELECT('role', 'disabled');
-                print_r($accountDisabled);
+                !$accountDisabled ?   $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any account disabled!',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $accountDisabled,
+                ));
                 break;
             case 'blocked':
-                $accountBlocked =$this->model('Account')->SELECT('role', 'blocked');
-                print_r($accountBlocked);
+                $accountBlocked =$this->model('Account')->SELECT('deleted', '1');
+                !$accountBlocked ?   $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any account blocked!',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $accountBlocked,
+                ));
                 break;
             case '':
                 $accountAll = $this->model('Account')->SELECT_ALL();
-                foreach($accountAll as $key => $value){
-                    if($value['email'] == 'admin@gmail.com'){
-                       unset($accountAll[$key]);
-                    }
-                }
-                print_r($accountAll);
+                !$accountAll ?  $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any account!',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $accountAll,
+                ));
                 break;
             default :
             $this->middleware->json_send_response(404, array(
@@ -84,17 +127,10 @@ class AdminApi extends Controller
     }
 
     function listTransConfirm($param){
-        $transNeedConfirm = !$this->model('transaction')->SELECT('action', 0) 
-        ?  
-        $this->middleware->json_send_response(500, array(
-            'status' => false,
-            'header_status_code' => 500,
-            'debug' => 'AdminAPI API function listTransConfirm(SELECT)',
-            'msg' => 'An error occurred while processing, please try again!'
-        )) : $this->model('transaction')->SELECT('action', 0);
-        // print_r($transNeedConfirm);
-
+       
+        $transNeedConfirm = $this->model('transaction')->SELECT('action', 0) ;
         switch($param){
+
             case 'withdraw' : 
                 $transWithdraw = [];
                 foreach($transNeedConfirm as $key => $value){
@@ -102,6 +138,17 @@ class AdminApi extends Controller
                         array_push($transWithdraw,$transNeedConfirm[$key]);
                     }
                 }
+                !$transWithdraw ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction to confirm !',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transWithdraw,
+                ));
+                print_r($transWithdraw);
                 break;
             case 'transfer' :
                 $transTransfer = [];
@@ -110,10 +157,28 @@ class AdminApi extends Controller
                         array_push($transTransfer,$transNeedConfirm[$key]);
                     }
                 }
-                print_r($transTransfer);
+                !$transTransfer ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction to confirm !',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transTransfer,
+                ));
                 break;
             case '':
-                print_r($transNeedConfirm);
+                !$transNeedConfirm ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction to confirm !',
+                )): $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transNeedConfirm,
+                ));
                 break;
             default :
             $this->middleware->json_send_response(404, array(
@@ -121,6 +186,30 @@ class AdminApi extends Controller
                 "header_status_code" => 404,
                 'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
             ));
+
+        }
+    }
+
+    function userDetails($phoneNumber){
+        !$phoneNumber ? $this->middleware->json_send_response(404, array(
+            'status' => false,
+            "header_status_code" => 404,
+            'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
+        )) : null;
+
+        $userInfor = $this->model('account')->SELECT_ONE('phoneNumber',$phoneNumber);
+        !$userInfor ? $this->middleware->json_send_response(200, 'This account does not exist') : 
+        $this->middleware->json_send_response(200, array(
+            'status' => true,
+            "header_status_code" => 200,
+            'msg' => 'Load List User successfully!',
+            'data' => $userInfor,
+        ));
+        
+
+    }
+    function confirmTransaction(){
+        if(isset($_POST['btn'])){
 
         }
     }

@@ -14,44 +14,41 @@ class ServiceApi extends Controller
     function __construct($route, $param)
     {
         $this->middleware = new ApiMiddleware();
+        $this->middleware->authentication();
+        $payload = $this->middleware->jwt_get_payload();
+        !($payload) ? 
+        $this->middleware->json_send_response(200, array(
+            'status' => false,
+            "header_status_code" => 200,
+            'msg' => 'Please login first!',
+            'redirect' => getenv('BASE_URL') . 'login',
+        )) : null;
+        !($payload->role == 'actived')? 
+        $this->middleware->json_send_response(404, array(
+            'status' => false,
+            "header_status_code" => 404,
+            'msg' => 'This account does not have permission!!'
+        )) : null;
         switch ($route) {
             case 'recharge':
                 $this->middleware->request_method('post');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
                 $this->recharge($payload);
                 break;
-
             case 'transfer': 
                 $this->middleware->request_method('post');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
                 $this->transfer($payload);
                 break;
-
             case 'withdraw': 
                 $this->middleware->request_method('post');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
                 $this->withdraw($payload);
                 break;
             case 'confirm-OTP':
                 $this->middleware->request_method('post');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
                 $this->confirmOTP($payload);
                 break;
             case 'buyPhoneCards':
                 $this->middleware->request_method('post');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
                 $this->buyPhoneCards($payload);
-                break;
-            case 'test' : 
-                $this->middleware->request_method('post');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
-                $this->test($payload);
                 break;
             default:
                 $this->middleware->json_send_response(404, array(
