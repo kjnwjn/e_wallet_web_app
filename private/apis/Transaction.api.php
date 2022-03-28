@@ -12,14 +12,14 @@ class transactionApi extends Controller{
     function __construct($route, $param)
     {
         $this->middleware = new ApiMiddleware();
+        $this->middleware->request_method('get');
+        $this->middleware->authentication();
+        $payload = $this->middleware->jwt_get_payload();
         switch ($route) {
             case 'histories':
-                $this->middleware->request_method('get');
-                $this->middleware->authentication();
-                $payload = $this->middleware->jwt_get_payload();
                 $this->histories($payload);
                 break;
-            case 'transfer': 
+            case 'transaction__details': 
                 break;
             case 'confirm-OTP':
                 break;

@@ -34,11 +34,23 @@ class AdminApi extends Controller
                 break;
             case 'list-transaction-confirm':
                 $this->middleware->request_method('get');
-                $this->listTransConfirm($param);
+                $this->listTransNeedConfirm($param);
                 break;
             case 'user-details':
                 $this->middleware->request_method('get');
                 $this->userDetails($param);
+                break;
+            case 'transaction-detail':
+                $this->middleware->request_method('get');
+                $this->transactionDetails($param);
+                break;
+            case 'accept-transaction':
+                $this->middleware->request_method('get');
+                $this->acceptTransaction($param);
+                break;
+            case 'cancel-transaction':
+                $this->middleware->request_method('get');
+                $this->cancelTransaction($param);
                 break;
             default:
                 $this->middleware->json_send_response(404, array(
@@ -126,7 +138,7 @@ class AdminApi extends Controller
         }
     }
 
-    function listTransConfirm($param){
+    function listTransNeedConfirm($param){
        
         $transNeedConfirm = $this->model('transaction')->SELECT('action', 0) ;
         switch($param){
@@ -176,7 +188,7 @@ class AdminApi extends Controller
                 )): $this->middleware->json_send_response(200, array(
                     'status' => true,
                     "header_status_code" => 200,
-                    'msg' => 'Load List User successfully!',
+                    'msg' => 'Load List Transaction successfully!',
                     'data' => $transNeedConfirm,
                 ));
                 break;
@@ -202,15 +214,125 @@ class AdminApi extends Controller
         $this->middleware->json_send_response(200, array(
             'status' => true,
             "header_status_code" => 200,
-            'msg' => 'Load List User successfully!',
+            'msg' => 'Load User successfully!',
             'data' => $userInfor,
         ));
-        
-
     }
-    function confirmTransaction(){
-        if(isset($_POST['btn'])){
+    function transactionDetails($transaction_id){
+        !$transaction_id ? $this->middleware->json_send_response(404, array(
+            'status' => false,
+            "header_status_code" => 404,
+            'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
+        )) : null;
 
+        $transaction = $this->model('transaction')->SELECT_ONE('transaction_id',$transaction_id);
+        !$transaction ? $this->middleware->json_send_response(200, 'This transaction does not exist') : 
+        $this->middleware->json_send_response(200, array(
+            'status' => true,
+            "header_status_code" => 200,
+            'msg' => 'Load transaction successfully!',
+            'data' => $transaction,
+        ));
+    }
+    function acceptTransaction($transaction_id){
+        (!isset($transaction_id) || empty($transaction_id)) ? $this->middleware->json_send_response(200, array(
+            'status' => false,
+            "header_status_code" => 200,
+            'msg' => 'Transaction id is not allow to be empty',
+        )) : null;
+        $transaction = $this->model('transaction')->SELECT_ONE('transaction_id',$transaction_id);
+        
+        $userInfor = $this->model('account')->SELECT_ONE('email',$transaction['email']);
+        !$userInfor ?  $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    "header_status_code" => 200,
+                    'msg' => 'Sender account does not exist or has been deleted by the administrator',
+                )) : null;
+        if($transaction ["type_transaction"] == '2'){
+            $recipient = $this->model('account')->SELECT_ONE('phoneNumber',$transaction['phoneRecipient']);
+            !$recipient ?  $this->middleware->json_send_response(200, array(
+                'status' => false,
+                "header_status_code" => 200,
+                'msg' => 'Recipient account does not exist or has been deleted by the administrator',
+            )) : null;
+            if($transaction ["costBearer"] == 'sender'){
+                $total = (int)($transaction['value_money']) + ((int)($transaction['value_money'])*0.05);
+                $condition1 = $this->model('account')->UPDATE_ONE(array('email' =>$userInfor['email']),array('wallet' =>$userInfor['wallet']-$total));
+                $condition2 = $this->model('account')->UPDATE_ONE(array('phoneNumber' =>$recipient['phoneNumber']),array('wallet' =>$recipient['wallet']+(int)($transaction['value_money'])));
+                $condition3 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('action' =>1));
+                $condition4 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('updatedAt' =>time()));
+                
+            }else{
+                $total = (int)($transaction['value_money']) - ((int)($transaction['value_money'])*0.05);
+                $condition1 = $this->model('account')->UPDATE_ONE(array('email' =>$userInfor['email']),array('wallet' =>$userInfor['wallet']-(int)($transaction['value_money'])));
+                $condition2 = $this->model('account')->UPDATE_ONE(array('phoneNumber' =>$recipient['phoneNumber']),array('wallet' =>$recipient['wallet']+$total));
+                $condition3 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('action' =>1));
+                $condition4 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('updatedAt' =>time()));
+            }
+            if($condition1 && $condition2 && $condition3 && $condition4){
+                $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Update transfer transaction successfully!',
+                ));
+            }else{
+                $this->middleware->json_send_response(500, array(
+                    'status' => false,
+                    'header_status_code' => 500,
+                    'debug' => 'Admin API function confirmTransaction(condition)',
+                    'msg' => 'An error occurred while processing, please try again!'
+                ));
+            }
+        }else{
+            $total = (int)($transaction['value_money']) + ((int)($transaction['value_money'])*0.05);
+            $condition1 = $this->model('account')->UPDATE_ONE(array('email' =>$userInfor['email']),array('wallet' =>$userInfor['wallet']-$total));
+            $condition3 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('action' =>1));
+            $condition4 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('updatedAt' =>time()));
+            if($condition1 && $condition3 && $condition4 ){
+                $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Update withdraw transaction successfully!',
+                ));
+            }else{
+                $this->middleware->json_send_response(500, array(
+                    'status' => false,
+                    'header_status_code' => 500,
+                    'debug' => 'Admin API function confirmTransaction(condition)',
+                    'msg' => 'An error occurred while processing, please try again!'
+                ));
+            }
+        }
+    }
+    function cancelTransaction($transaction_id){
+        (!isset($transaction_id) || empty($transaction_id)) ? $this->middleware->json_send_response(200, array(
+            'status' => false,
+            "header_status_code" => 200,
+            'msg' => 'Transaction id is not allow to be empty',
+        )) : null;
+        $transaction = $this->model('transaction')->SELECT_ONE('transaction_id',$transaction_id);
+        
+        $userInfor = $this->model('account')->SELECT_ONE('email',$transaction['email']);
+        !$userInfor ?  $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    "header_status_code" => 200,
+                    'msg' => 'Sender account does not exist or has been deleted by the administrator',
+                )) : null;
+        $condition1 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('action' =>2));
+        $condition2 = $this->model('transaction')->UPDATE_ONE(array('transaction_id' =>$transaction['transaction_id']),array('updatedAt' =>time()));
+        if($condition1 && $condition2){
+            $this->middleware->json_send_response(200, array(
+                'status' => true,
+                "header_status_code" => 200,
+                'msg' => 'Update transfer transaction successfully!',
+            ));
+        }else{
+            $this->middleware->json_send_response(500, array(
+                'status' => false,
+                'header_status_code' => 500,
+                'debug' => 'Admin API function confirmTransaction(condition)',
+                'msg' => 'An error occurred while processing, please try again!'
+            ));
         }
     }
 }

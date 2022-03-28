@@ -2,158 +2,37 @@
     <div class="row p-3">
         <div class="col my-4 p-3 bg-white border shadow-sm lh-sm">
             <div class="table-list-title">
-                <h2 class="ps-4 mb-4">List Account</h2>
+                <h2 class="ps-4 position-relative">List Account</h2>
                 <div class="dropdown ">
                     <button class="btn btn-secondary dropdown-toggle list__type-account" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Type of Account
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">Pending</a>
-                        <a class="dropdown-item" href="#">Actived</a>
-                        <a class="dropdown-item" href="#">Disabled</a>
-                        <a class="dropdown-item" href="#">All Account</a>
+                        <a class="dropdown-item" href="#" onclick="renderPendingData()">Pending</a>
+                        <a class="dropdown-item" href="#" onclick="renderActivedData()">Actived</a>
+                        <a class="dropdown-item" href="#" onclick="renderDisabledData()">Disabled</a>
+                        <a class="dropdown-item" href="#" onclick="renderAllAccountData()">All Account</a>
                     </div>
                 </div>
             </div>
         </div>
-        
-        <table class="table table-bordered table-striped mt-0" >
-            <thead>
-                <tr>
-                    <th>Order ID</th>
-                    <th>Customer</th>
-                    <th>Status</th>
-                    <th>Total</th>
-                    <th>Order date</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Ord#13</td>
-                    <td class="align-middle">
-                        Stephanie Cott
-                    </td>
-                    <td class="align-middle"><span class="badge badge-warning">Pending</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme btn_show" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
+        <div class="table-responsive ">
+            <table class="table table-bordered table-striped mt-0">
+                <thead>
+                    <tr>
+                        <th>email</th>
+                        <th>Phone Number</th>
+                        <th>Status</th>
+                        <th>Fullname</th>
+                        <th>gender</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody__details">
 
-                    <td>Ord#14</td>
-                    <td class="align-middle">
-                        Andy Webb
-                    </td>
-                    <td class="align-middle"><span class="badge badge-danger">Cancelled</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-
-                    <td>Ord#15</td>
-                    <td class="align-middle">
-                        Andy Webb
-                    </td>
-                    <td class="align-middle"><span class="badge badge-success">Delivered</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-
-                    <td>Ord#16</td>
-                    <td class="align-middle">
-                        Stephanie Cott
-                    </td>
-                    <td class="align-middle"><span class="badge badge-warning">Pending</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-
-                    <td>Ord#17</td>
-                    <td class="align-middle">
-                        Andy Webb
-                    </td>
-                    <td class="align-middle"><span class="badge badge-danger">Cancelled</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-
-                    <td>Ord#18</td>
-                    <td class="align-middle">
-                        Andy Webb
-                    </td>
-                    <td class="align-middle"><span class="badge badge-success">Delivered</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Ord#19</td>
-                    <td class="align-middle">
-                        Stephanie Cott
-                    </td>
-                    <td class="align-middle"><span class="badge badge-warning">Pending</span></td>
-                    <td class="align-middle">$200</td>
-                    <td>15/09/2018</td>
-                    <td class="align-middle text-center">
-                        <button class="btn btn-theme" data-toggle="modal" data-target="#orderInfo">
-                            <i class="fa fa-eye"></i>
-                        </button>
-                        <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i
-                                class="fa fa-pencil"></i></button>
-                        <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                    </td>
-                </tr>
-        </table>
+                </tbody>
+            </table>
+        </div>
         <div class="modal fade" id="orderInfo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
@@ -203,15 +82,21 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="text-right">
-            <button class="btn btn-outline-theme"><i class="fa fa-eye"></i> View full Accounts</button>
-        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination">
+                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+                <li class="page-item"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">Next</a></li>
+            </ul>
+        </nav>
     </div>
 </div>
 <!-- <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
@@ -223,23 +108,91 @@
     const urlPendingAccount = 'http://localhost/api/admin/list-account/pending'
     const urlActivedAccount = 'http://localhost/api/admin/list-account/actived'
     const urlDisabledAccount = 'http://localhost/api/admin/list-account/disabled'
-    fetch(urlAllAccount)
-    .then(response => response.json())
-    .then(AllAccount => console.log(AllAccount))
-
-    fetch(urlPendingAccount)
-    .then(response => response.json())
-    .then(Pending => console.log(Pending))
-
-    fetch(urlActivedAccount)
-    .then(response => response.json())
-    .then(Actived => console.log(Actived))
     
-    fetch(urlDisabledAccount)
-    .then(response => response.json())
-    .then(Disabled => console.log(Disabled))
-
-
-    
-    
+    function renderData(url = ''){
+        fetch(url)
+            .then(response => response.json())
+            .then(response => {
+                // console.log(AllAccount);
+                if(response.status == true){
+                    $('#tbody__details').html(response.data.map((element) => {
+                        if(element.role == 'pending'){
+                            return `
+                            <tr>
+                                <td>${element.email}</td>
+                                <td class="align-middle">
+                                    ${element.phoneNumber}
+                                </td>
+                                <td class="align-middle"><span class="badge badge-warning">Pending</span></td>
+                                <td class="align-middle">${element.fullname}</td>
+                                <td>${element.gender}</td>
+                                <td class="align-middle text-center">
+                                    <button class="btn btn-theme btn_show" data-toggle="modal" data-target="#orderInfo">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            `
+                        }else if(element.role == 'actived'){
+                            return `
+                            <tr>
+                                <td>${element.email}</td>
+                                <td class="align-middle">
+                                    ${element.phoneNumber}
+                                </td>
+                                <td class="align-middle"><span class="badge badge-success">Actived</span></td>
+                                <td class="align-middle">${element.fullname}</td>
+                                <td>${element.gender}</td>
+                                <td class="align-middle text-center">
+                                    <button class="btn btn-theme btn_show" data-toggle="modal" data-target="#orderInfo">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            `
+                        }else{
+                            return `
+                            <tr>
+                                <td>${element.email}</td>
+                                <td class="align-middle">
+                                    ${element.phoneNumber}
+                                </td>
+                                <td class="align-middle"><span class="badge badge-success">Disable</span></td>
+                                <td class="align-middle">${element.fullname}</td>
+                                <td>${element.gender}</td>
+                                <td class="align-middle text-center">
+                                    <button class="btn btn-theme btn_show" data-toggle="modal" data-target="#orderInfo">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button class="btn btn-success" data-toggle="modal" data-target="#orderUpdate"><i class="fa fa-pencil"></i></button>
+                                    <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                </td>
+                            </tr>
+                            `
+                        }
+                    }))
+                }else{
+                    $('#tbody__details').html(response.msg)
+                }
+            })
+       
+    }
+    renderData(urlAllAccount);
+    function renderPendingData(){
+        renderData(urlPendingAccount)
+    }
+    function renderActivedData(){
+        renderData(urlActivedAccount)
+    }
+    function renderDisabledData(){
+        renderData(urlDisabledAccount)
+    }
+    function renderAllAccountData(){
+        renderData(urlAllAccount)
+    }
+  
 </script>
