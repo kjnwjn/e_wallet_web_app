@@ -156,12 +156,14 @@ class AccountApi extends Controller
         $userFound = $this->model('Account')->SELECT_ONE('phoneNumber', $_POST['phoneNumber']);
         !$userFound ? $this->middleware->error_handler(404, 'This account does not exist!') : null;
 
-        // Check account clocked
-        $userFound['deleted']
-            ? $this->middleware->error_handler(200, 'Your account has been unactivated, please contact adminstrator for more information.')
-            : null;
+        // Check account blocked
+        $userFound['role'] == 'blocked'
+        ? $this->middleware->error_handler(200, 'Your account has been unactivated, please contact adminstrator for more information.')
+        : null;
 
-        
+        // Check account disable
+        $userFound['role'] == 'disabled' 
+        ? $this->middleware->error_handler(200, 'Your account has been disable, please contact adminstrator for more information.'): null;
         // Check clocked in 1 minute
         (isset($_SESSION['a_minute_expire']) && time() < $_SESSION['a_minute_expire']) ?
             $this->middleware->json_send_response(200, array(
@@ -200,7 +202,7 @@ class AccountApi extends Controller
 
             // Unactivated account if wrong password many time (>= 6 times)
             if ($wrongPassCount == 6) {
-                $this->model('Account')->UPDATE_ONE(array('phoneNumber' => $_POST['phoneNumber']), array('deleted' => 1));
+                $this->model('Account')->UPDATE_ONE(array('phoneNumber' => $_POST['phoneNumber']), array('role' => 'blocked'));
                 $this->middleware->error_handler(200, 'Your account has been unactivated, please contact adminstrator for more information.');
             }
 

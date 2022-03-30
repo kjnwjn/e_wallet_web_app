@@ -79,7 +79,7 @@
                     <div class="sidebar-menu-container">
                         <ul class="sidebar-menu my-4 px-0">
                             <li class="sidebar__item py-3">
-                                <a href="#" onclick="toggle_menu('dashboard'); return false"
+                                <a href="<?= getenv('BASE_URL') ?>dashboard" onclick="toggle_menu('dashboard'); return false"
                                     class="sidebar__item-link"><i class="fa fa-dashboard mx-2"> </i>
                                     <span class="sidebar__text">Dashboard <i
                                             class="fa fa-angle-right float-right"></i></span>
@@ -106,7 +106,7 @@
             
             <?php
                 isset($data['page']) ?
-                    include('./private/view/pages/' . $data['page'] . '.php') : null
+                    include('./private/view/pages/adminPages/' . $data['page'] . '.php') : null
             ?>
         </div>
 
@@ -140,8 +140,7 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.rtl.min.css"/>
         <!-- Bootstrap theme -->
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
-         
-
+        
        
 </body>
 

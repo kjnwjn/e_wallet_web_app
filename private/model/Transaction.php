@@ -16,6 +16,7 @@ class Transaction extends DB
         $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
+   
     function SELECT_INNER_JOIN($column = [],$table = '',$condition ='')
     {
         $value_field = [];
@@ -36,7 +37,7 @@ class Transaction extends DB
     {
         $sql = 'SELECT * from `transaction`';
         $stmt = $this->conn->query($sql);
-        $result = mysqli_fetch_array($stmt, MYSQLI_ASSOC);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
     function INSERT($field = [])

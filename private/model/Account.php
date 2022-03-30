@@ -41,6 +41,21 @@ class Account extends DB
         return $result ? $result : array();
     }
 
+    function SELECT_ORDER_BY_ASC($condition = '', $conditionValue = '',$fieldValue = '')
+    {
+        $sql = 'SELECT * from `account` WHERE '. $condition . ' = "' . $conditionValue . '" ORDER BY `'.$fieldValue . '` ASC';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
+    function SELECT_ORDER_BY_DESC($condition = '', $conditionValue = '',$fieldValue = '')
+    {
+        $sql = 'SELECT * from `account` WHERE '. $condition . ' = "' . $conditionValue . '" ORDER BY `'.$fieldValue . '` DESC';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
+
     function SELECT_ALL()
     {
         $sql = 'SELECT * from account';

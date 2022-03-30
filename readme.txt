@@ -18,5 +18,5 @@ Chọn loại tài khoản :
 Loại giao dịch(action)
 0 : pending (money > 5000000)
 1 : ok
-2 : cancel
+2 : cancel or don't have enough money
 

@@ -140,11 +140,7 @@ a:hover{
   justify-content: center;
   align-items: center;
 }
-.ajs-close{
-  position: relative;
-  float: right;
-  top: 19px;
-}
+
 /* .sidebar__hide {
   position: absolute;
   transform: translateX(-100%);
