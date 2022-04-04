@@ -67,6 +67,9 @@ class AccountApi extends Controller
                 $this->middleware->authentication();
                 $this->userDetails($param);
                 break;
+            case 'test':
+                $this->test();
+                break;
             default:
                 $this->middleware->json_send_response(404, array(
                     'status' => false,
@@ -117,7 +120,7 @@ class AccountApi extends Controller
 
     function login()
     {
-
+        // print_r($_POST);
         if(isset($_POST['phoneNumber']) && trim($_POST['phoneNumber'] == 'admin')){
             if(isset($_POST['password']) && trim($_POST['password']) =='123456'){
                 $jwt = JWT::encode(array(
@@ -198,16 +201,18 @@ class AccountApi extends Controller
                     'msg' => 'Your account has been unactivated in 1 minute',
                     'expired' => $_SESSION['a_minute_expire']
                 ));
+            }else if ($wrongPassCount == 6) {
+                $this->model('Account')->UPDATE_ONE(array('phoneNumber' => $_POST['phoneNumber']), array('role' => 'blocked'));
+                $this->middleware->error_handler(200, 'Your account has been unactivated, please contact adminstrator for more information.');
+            }else{
+
+                $this->middleware->error_handler(200, 'Password is incorrect!');
             }
 
             // Unactivated account if wrong password many time (>= 6 times)
-            if ($wrongPassCount == 6) {
-                $this->model('Account')->UPDATE_ONE(array('phoneNumber' => $_POST['phoneNumber']), array('role' => 'blocked'));
-                $this->middleware->error_handler(200, 'Your account has been unactivated, please contact adminstrator for more information.');
-            }
+            
 
             // Send response
-            $this->middleware->error_handler(401, 'Password is incorrect!');
         }
 
         // Login successfully
@@ -219,6 +224,7 @@ class AccountApi extends Controller
                 'phoneNumber' => $userFound['phoneNumber'],
                 'fullname' => $userFound['fullname'],
                 'role' => $userFound['role'],
+                'setupPass' => 'null',
             ), getenv('SECRET_KEY'), 'HS256');
 
             // Update wrong password count to zero
@@ -230,11 +236,15 @@ class AccountApi extends Controller
             setcookie('JWT_TOKEN', $jwt, time() + (86400 * 1), "/"); /* 86400 = 1 day */
             if($_POST['phoneNumber'])
 
+            ($userFound['initialPassword'] !== 'NULL')
+            ? $redirect = getenv('BASE_URL') . 'setupPassword'
+            : $redirect = getenv('BASE_URL') ;
+            
             // Send response
             $this->middleware->json_send_response(200, array(
                 'status' => true,
                 'msg' => 'Login successfully, redirecting...',
-                'redirect' => getenv('BASE_URL'),
+                'redirect' => $redirect,
             ));
         }
     }
@@ -480,5 +490,9 @@ class AccountApi extends Controller
                 )
             );
         }
+    }
+
+    function test(){
+        print_r($_POST);
     }
 }

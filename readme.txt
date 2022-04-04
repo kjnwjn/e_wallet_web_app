@@ -20,3 +20,11 @@ Loại giao dịch(action)
 1 : ok
 2 : cancel or don't have enough money
 
+
+need to complete
+
+
+bug : 
+1: confirm transacton cần gửi cho người dùng 1 mail xác nhận
+2: fix response admin
+

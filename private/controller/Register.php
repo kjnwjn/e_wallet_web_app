@@ -1,7 +1,7 @@
 <?php
 require_once('./private/core/jwt/vendor/autoload.php');
 require_once('./private/middlewares/Api.middleware.php');
-class Login extends Controller
+class Register extends Controller
 {
     function __construct()
     {
@@ -18,8 +18,8 @@ class Login extends Controller
     function default()
     {
         $this->view('layoutValidate', array(
-            'title' => 'Login',
-            'page' => 'login'
+            'title' => 'register',
+            'page' => 'register'
         ));
     }
 }

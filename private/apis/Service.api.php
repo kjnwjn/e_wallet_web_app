@@ -50,6 +50,9 @@ class ServiceApi extends Controller
                 $this->middleware->request_method('post');
                 $this->buyPhoneCards($payload);
                 break;
+            case 'test':
+                $this->test();
+                break;
             default:
                 $this->middleware->json_send_response(404, array(
                     'status' => false,
@@ -668,12 +671,7 @@ class ServiceApi extends Controller
 
     }
 
-    function test($payload){
-        $abc = $this->model('transaction')->
-        SELECT_INNER_JOIN(array(
-            'account.fullname'),
-            'account','transaction.email = account.email and transaction_id = 204883');
-        
-        print_r($abc);
+    function test(){
+        print_r($_POST);
     }
 }

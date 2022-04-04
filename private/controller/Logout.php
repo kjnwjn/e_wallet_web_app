@@ -1,6 +1,7 @@
 <?php
 class Logout extends Controller
 {
+    
     public function __construct()
     {
         if (isset($_COOKIE['JWT_TOKEN'])) {

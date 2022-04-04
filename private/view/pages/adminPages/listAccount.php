@@ -190,7 +190,6 @@
             .then(response => response.json())
             .then(response => {
                 if (response.status) {
-                    console.log(response)
                     const createdTime = new Date(response.data.createdAt * 1000)
                     const createdString = createdTime.getDate() +
                         "/" + (createdTime.getMonth() + 1) +
@@ -281,7 +280,9 @@
                         'content': value
                     })
                     .then(data => {
-                        console.log(data);
+                        if(data.ok){
+                            alertify.success('Sent request successfully');
+                        }
                     })
             },
             function() {

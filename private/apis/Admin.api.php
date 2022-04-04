@@ -35,7 +35,7 @@ class AdminApi extends Controller
                 break;
             case 'list-all-transaction':
                 $this->middleware->request_method('get');
-                $this->listAllTransactions();
+                $this->listAllTransactions($param);
                 break;
             case 'list-transaction-confirm':
                 $this->middleware->request_method('get');
@@ -68,6 +68,10 @@ class AdminApi extends Controller
             case 'cancel-transaction':
                 $this->middleware->request_method('get');
                 $this->cancelTransaction($param);
+                break;
+            case 'phone-card-transaction':
+                $this->middleware->request_method('get');
+                $this->listPhoneCardbyIdTrans($param);
                 break;
             default:
                 $this->middleware->json_send_response(404, array(
@@ -245,7 +249,7 @@ class AdminApi extends Controller
         !$userInfor ? $this->middleware->error_handler(200, 'This account does not exit!') : null;
         $sendMail = $this->utils()->sendMail(array(
             "email" => $userInfor['email'],
-            'title' => 'Payment recevie',
+            'title' => 'Additional Request for KIWI APP',
             'content' => '
             <body>
                     <p>Thank you for your registering on our application! 
@@ -266,18 +270,111 @@ class AdminApi extends Controller
 
     // Transaction Handling
 
-    function listAllTransactions(){
+    function listAllTransactions($param){
+
         $allTrans = $this->model('Transaction')->SELECT_ALL() ;
         !$allTrans ?$this->middleware->json_send_response(200, array(
             'status' => false,
             "header_status_code" => 200,
             'msg' => 'Does not have any translations!',
-        )) : $this->middleware->json_send_response(200, array(
-            'status' => true,
-            "header_status_code" => 200,
-            'msg' => 'Load list transaction successfully!',
-            'data' => $allTrans
-        ));
+        )) : null;
+        switch ($param) {
+            case 'recharge':
+                $transRecharge = [];
+                foreach ($allTrans as $key => $value) {
+                    if ($value['type_transaction'] == '1') {
+                        array_push($transRecharge, $allTrans[$key]);
+                    }
+                }
+                !$transRecharge ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction !',
+                )) : $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transRecharge,
+                ));
+                break;
+
+            case 'transfer':
+                $transTransfer = [];
+                foreach ($allTrans as $key => $value) {
+                    if ($value['type_transaction'] == '2') {
+                        array_push($transTransfer, $allTrans[$key]);
+                    }
+                }
+                !$transTransfer ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction !',
+                )) : $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transTransfer,
+                ));
+                break;
+
+            case 'withdraw':
+                $transWithdraw = [];
+                foreach ($allTrans as $key => $value) {
+                    if ($value['type_transaction'] == '3') {
+                        array_push($transWithdraw, $allTrans[$key]);
+                    }
+                }
+                !$transWithdraw ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction !',
+                )) : $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transWithdraw,
+                ));
+                print_r($transWithdraw);
+                break;
+            case 'phonecard':
+                $transPhonecard = [];
+                foreach ($allTrans as $key => $value) {
+                    if ($value['type_transaction'] == '4') {
+                        array_push($transPhonecard, $allTrans[$key]);
+                    }
+                }
+                !$transPhonecard ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction !',
+                )) : $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List User successfully!',
+                    'data' => $transPhonecard,
+                ));
+                print_r($transPhonecard);
+                break;
+            
+            case '':
+                !$allTrans ? $this->middleware->json_send_response(200, array(
+                    'status' => false,
+                    'header_status_code' => 200,
+                    'msg' => 'Do not have any transaction !',
+                )) : $this->middleware->json_send_response(200, array(
+                    'status' => true,
+                    "header_status_code" => 200,
+                    'msg' => 'Load List Transaction successfully!',
+                    'data' => $allTrans,
+                ));
+                break;
+            default:
+                $this->middleware->json_send_response(404, array(
+                    'status' => false,
+                    "header_status_code" => 404,
+                    'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
+                ));
+        }
     }
 
     function listTransNeedConfirm($param)
@@ -600,5 +697,22 @@ class AdminApi extends Controller
                 'msg' => 'An error occurred while processing, please try again!'
             ));
         }
+    }
+
+    function listPhoneCardbyIdTrans($transaction_id){
+        !$transaction_id ? $this->middleware->json_send_response(404, array(
+            'status' => false,
+            "header_status_code" => 404,
+            'msg' => 'This endpoint cannot be found, please contact adminstrator for more information!'
+        )) : null;
+
+        $listPhoneCard = $this->model('phoneCard')->SELECT('transaction_id', $transaction_id);
+        !$listPhoneCard ? $this->middleware->json_send_response(200, 'This transaction does not have any phone card') :
+            $this->middleware->json_send_response(200, array(
+                'status' => true,
+                "header_status_code" => 200,
+                'msg' => 'Load User successfully!',
+                'data' => $listPhoneCard,
+            ));
     }
 }

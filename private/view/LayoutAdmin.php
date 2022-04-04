@@ -26,7 +26,7 @@
     </style>
 </head>
 
-<body>
+<body onload="preloader()" style="font-size: initial;">
     <!--Page loader-->
     <div class="loader-wrapper">
         <div class="loader-circle">
@@ -61,10 +61,7 @@
                                     <a class="dropdown-item" href="<?= getenv('BASE_URL') ?>logout">
                                         <i class="fa-solid fa-power-off"></i>
                                         Logout</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="fa-solid fa-power-off"></i>
-                                        Logout</a>
+                                    <!-- <div class="dropdown-divider"></div> -->
                                 </div>
                             </div>
                         </div>
@@ -95,8 +92,15 @@
                             <li class="sidebar__item py-3">
                                 <a href="<?= getenv('BASE_URL') ?>dashboard/listtransactions" onclick="toggle_menu('dashboard'); return false"
                                     class="sidebar__item-link"><i class="fa-solid fa-money-bill mx-2"></i>
-                                    <span class="sidebar__text">Transaction <i
+                                    <span class="sidebar__text">Transaction Confirm<i
                                             class="fa fa-angle-right float-right"></i></span>
+                                </a>
+                            </li>
+                            <li class="sidebar__item py-3">
+                                <a href="<?= getenv('BASE_URL') ?>dashboard/listAllTransaction" onclick="toggle_menu('dashboard'); return false"
+                                    class="sidebar__item-link"><i class="fa-solid fa-money-bill-1-wave mx-2"></i>
+                                    <span class="sidebar__text">All Transactions
+                                        <i class="fa fa-angle-right float-right"></i></span>
                                 </a>
                             </li>
                         </ul>
@@ -111,7 +115,7 @@
         </div>
 
     </div>
-        <script type="module" src="<?= getenv('BASE_URL') ?>main.js"></script>
+        <!-- <script type="module" src="<?= getenv('BASE_URL') ?>main.js"></script> -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
@@ -120,7 +124,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
         <!-- JavaScript -->
         <script src="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/alertify.min.js"></script>
-
+        
         <!-- CSS -->
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/alertify.min.css"/>
         <!-- Default theme -->
@@ -129,7 +133,7 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/semantic.min.css"/>
         <!-- Bootstrap theme -->
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.min.css"/>
-
+        
         <!-- 
             RTL version
         -->
@@ -141,6 +145,7 @@
         <!-- Bootstrap theme -->
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/alertifyjs@1.13.1/build/css/themes/bootstrap.rtl.min.css"/>
         
+        <script src="<?= getenv('BASE_URL') ?>main.js"></script>
        
 </body>
 
