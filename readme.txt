@@ -22,9 +22,10 @@ Loại giao dịch(action)
 
 
 need to complete
-
+1: confirm OTP
 
 bug : 
 1: confirm transacton cần gửi cho người dùng 1 mail xác nhận
 2: fix response admin
+
 

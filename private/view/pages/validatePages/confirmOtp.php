@@ -5,25 +5,21 @@
         font-size: 12px;
     }
 
-    .login-main {
-        background-image: linear-gradient(45deg, #222D73 0%, #78ebfc 100%);
-    }
 </style>
 <div class="main login-main" style="background-image: linear-gradient(45deg, #222D73 0%, #78ebfc 100%)">
-    <form action="" method="POST" class="form" id="setupPassword-form">
-        <h3 class="heading">Setup Password</h3>
-        <p class="desc">You need to change your password first.</p>
+    <form action="" method="POST" class="form" id="conFirmOtp-form">
+        <h3 class="heading">Confirm OTP</h3>
+        <p class="desc"></p>
         <div class="form-group form-validation">
-            <label for="password" class="form-label">Password</label>
-            <input id="password" name="password" placeholder="Type 6 characters" type="password" class="form-control" rules="required&min=6" />
+            <label for="otpcode" class="form-label">You Otp code</label>
+            <input id="otpcode" name="otpcode" placeholder="Type 6 characters" type="password" class="form-control" rules="required&min=6" />
             <span class="error-message"></span>
         </div>
         <div class="form-group form-validation">
-            <label for="confirm_password" class="form-label">Password confirm</label>
-            <input id="confirm_password" name="confirm_password" placeholder="Type 6 characters" type="password" class="form-control" rules="required&min=6" />
+            <label for="confirmPassword" class="form-label">Confirm Password</label>
+            <input id="confirmPassword" name="confirmPassword" placeholder="Type 6 characters" type="password" class="form-control" rules="required&min=6" />
             <span class="error-message"></span>
         </div>
-        
         <button type="submit" id="btnSubmit" class="form-submit btn">Submit</button>
     </form>
 </div>
@@ -36,7 +32,7 @@
 <script>
     url = 'http://localhost/api/account'
     
-    if($('#setupPassword-form')){
-        validation_submitform(url + '/setup-password' )
+    if($('#conFirmOtp-form')){
+        validation_submitform(url + '/change-password' )
     }
 </script>

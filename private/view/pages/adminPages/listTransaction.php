@@ -1,67 +1,66 @@
-<div class="col-lg-9 col-md-10 col-xs-6 main__content">
-    <div class="row p-3">
-        <div class="col my-4 p-3 bg-white border shadow-sm lh-sm">
-            <div class="table-list-title">
-                <h2 class="ps-4">List Transaction Need Confirm</h2>
-                <div class="dropdown ">
-                    <button class="btn btn-secondary dropdown-toggle list__type-account" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Type of Transaction
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#" onclick="renderWithDrawData()">With draw</a>
-                        <a class="dropdown-item" href="#" onclick="renderTransferData()">Transfer</a>
-                        <a class="dropdown-item" href="#" onclick="renderAllTransactionsNeedConfirmData()">All Transaction Need Confirm</a>
-                    </div>
+
+<div class="row p-3">
+    <div class="col my-4 p-3 bg-white border shadow-sm lh-sm">
+        <div class="table-list-title">
+            <h2 class="ps-4">List Transaction Need Confirm</h2>
+            <div class="dropdown ">
+                <button class="btn btn-secondary dropdown-toggle list__type-account" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Type of Transaction
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" onclick="renderWithDrawData()">With draw</a>
+                    <a class="dropdown-item" href="#" onclick="renderTransferData()">Transfer</a>
+                    <a class="dropdown-item" href="#" onclick="renderAllTransactionsNeedConfirmData()">All Transaction Need Confirm</a>
                 </div>
             </div>
         </div>
-        <div class="table-responsive ">
-            <table id="table__details" class="table table-bordered table-striped mt-0">
-                <thead id="thead__details">
-
-                </thead>
-                <tbody id="tbody__details">
-                </tbody>
-            </table>
-        </div>
-        <!-- Modal transaction-->
-        <div class="modal fade" id="modal__details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Transaction details</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table class="table">
-                                <thead id="transaction-thead" class="thead-dark ">
-
-                                </thead>
-                                <tbody id="transaction-tbody">
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <li class="page-item"><a class="page-link" href="#">1</a></li>
-                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
     </div>
+    <div class="table-responsive ">
+        <table id="table__details" class="table table-bordered table-striped mt-0">
+            <thead id="thead__details">
+
+            </thead>
+            <tbody id="tbody__details">
+            </tbody>
+        </table>
+    </div>
+    <!-- Modal transaction-->
+    <div class="modal fade" id="modal__details" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Transaction details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead id="transaction-thead" class="thead-dark ">
+
+                            </thead>
+                            <tbody id="transaction-tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item"><a class="page-link" href="#">Next</a></li>
+        </ul>
+    </nav>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>

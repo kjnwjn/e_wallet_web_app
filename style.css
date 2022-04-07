@@ -1,3 +1,4 @@
+
 * {
   padding: 0;
   margin: 0;
@@ -160,6 +161,12 @@ a:hover{
 .app__name-link:hover{
   color: #000;
 }
+.header-admin {
+  position: fixed;
+  z-index: 1000;
+  width: inherit;
+  top: 0;
+}
 .header__app_name{
   border: 1px solid #f6f6f6;
   background-color: #00ADB5;
@@ -184,6 +191,9 @@ a:hover{
 }
 .sidebar-menu-container{
   height: 100%;
+}
+.row.main-content{
+  margin-top: 50px;
 }
 
 .profile{
@@ -280,6 +290,7 @@ a:hover{
 }
 
 
+
 /* .sidebar__hide {
   position: absolute;
   transform: translateX(-100%);
@@ -357,4 +368,22 @@ a:hover{
 @-webkit-keyframes animate {
   0% { transform: translate(-50%, -75%) rotate(0deg) }
   100% { transform: translate(-50%, -75%) rotate(360deg) }
+}
+@media only screen and (max-width: 	768px) {
+  .body_taskbar{
+    text-align:center;
+    height:auto;
+  }
+  .row.main-content{
+    margin-top: 81px;
+  }
+  .sidebar__text {
+    display: none;
+  }
+}
+@media only screen and (min-width: 	768px) {
+  .table-data_admin{
+    overflow: auto;
+  }
+  
 }

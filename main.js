@@ -168,7 +168,7 @@ function validation_submitform(url){
 
                                     if (distance < 0) {
                                         clearInterval(x);
-                                        $('p').html = ('');
+                                        $('p').html('');
                                         $(":submit").removeAttr("disabled");
                                         $(":submit").addClass("form-submit");
                                         $('p').removeClass('invalid')

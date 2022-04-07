@@ -1,23 +1,21 @@
-<div class="col-lg-9 col-md-10 col-xs-6 main__content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-lg-6 p-3">
-                <canvas class= "" id="myChart"></canvas>
-            </div>
-            <div class="col-lg-6 p-3">
-                <canvas class= "" id="myChart4"></canvas>
-            </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-6 p-3">
+            <canvas class= "" id="myChart"></canvas>
         </div>
-        <div class="row">
-            <div class="col-lg-6 p-3">
-              <canvas class= "" id="myChart2"></canvas>
-            </div>
-            <div class="col-lg-6 p-3">
-              <canvas class= "" id="myChart3"></canvas>
-            </div>
+        <div class="col-lg-6 p-3">
+            <canvas class= "" id="myChart4"></canvas>
         </div>
-
     </div>
+    <div class="row">
+        <div class="col-lg-6 p-3">
+          <canvas class= "" id="myChart2"></canvas>
+        </div>
+        <div class="col-lg-6 p-3">
+          <canvas class= "" id="myChart3"></canvas>
+        </div>
+    </div>
+
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>

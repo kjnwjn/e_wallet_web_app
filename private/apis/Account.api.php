@@ -224,7 +224,7 @@ class AccountApi extends Controller
                 'phoneNumber' => $userFound['phoneNumber'],
                 'fullname' => $userFound['fullname'],
                 'role' => $userFound['role'],
-                'setupPass' => 'null',
+                
             ), getenv('SECRET_KEY'), 'HS256');
 
             // Update wrong password count to zero
