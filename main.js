@@ -131,6 +131,7 @@ function Validation(formSelector, options) {
 
   };
 };
+
 function preloader(){
     $('.loader-wrapper').hide();
 }
@@ -144,8 +145,7 @@ function validation_submitform(url){
                     type: "post",                                                                      
                     data: data,                                                     
                     url: url,                                                               
-                    success: function (response) {   
-                        console.log(response)
+                    success: function (response) { 
                         if(response.status) {
                             alertify.success(response.msg);
                             if(response.redirect) {
@@ -180,8 +180,58 @@ function validation_submitform(url){
                         }                                                        
                     },                                                                                 
                 });  
-                console.log(data)
             },
         });
     }
 }
+
+function submitformAction(url,method){
+    form.submit(e => {
+        var data =form.serialize()
+        e.preventDefault();
+        $.ajax({
+            type: method,
+            url: url,
+            data: data,
+            success: function (data) {
+                if(data.status) {
+                    alertify.success(data.msg);
+                    if(data.redirect) {
+                        window.location.href = data.redirect;
+                    }
+                }else{
+                    alertify.error(data.msg);
+                }
+            },
+            error: function (data) {
+                console.log(data.responseText);
+            },
+        })
+    })
+}
+
+
+// function userDetailsRequest(url){
+//     formTransfer.submit(e => {
+       
+//         e.preventDefault();
+//         $.ajax({
+//             type: "GET",
+//             url: url,
+//             success: function (data) {
+//                 if(data.status) {
+//                     console.log(data.response)
+//                     if(data.redirect) {
+//                         window.open("http://localhost/confirm-OTP/", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=400,width=500,height=600");
+//                     }
+//                 }else{
+//                     console.log(data)
+//                     alertify.error(data.msg);
+//                 }
+//             },
+//             error: function (data) {
+//                 console.log(data.msg);
+//             },
+//         })
+//     })
+// }

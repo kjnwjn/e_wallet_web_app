@@ -53,8 +53,10 @@ class PhoneCard extends DB
         $field_name = implode(',', $key_field);
 
         try {
-            $sql = 'INSERT INTO phoneCard (' . $field_name . ') VALUES (' . $value . ')';
+            $sql = 'INSERT INTO phoneCard (' . $field_name . ') VALUES (?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('iisiiss',
+            $field['phoneCard_id'],$field['transaction_id'],$field['mno'],$field['phoneCardType'],$field['amount'],$field['createdAt'],$field['updatedAt']);
             if(!$stmt){
                 echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
              }
@@ -74,18 +76,18 @@ class PhoneCard extends DB
             $conditionValue = $conditions[$conditionName];
             $toUpdateName = array_keys($toUpdate)[0];
             $newValue = $toUpdate[$toUpdateName];
-            $sql = 'UPDATE phoneCard SET ' . $toUpdateName . ' = "' . $newValue . '" WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE phonecard SET ' . $toUpdateName . ' = ? WHERE ' . $conditionName . ' = ?';
             $stmt = $this->conn->prepare($sql);
-            if(!$stmt){
-                echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
-             }
+            $stmt->bind_param('ss',$newValue,$conditionValue);
             $stmt->execute();
-            $sql = 'UPDATE phoneCard SET updatedAt = ' . time() . ' WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE phonecard SET updatedAt = ? WHERE ' . $conditionName . ' = ?';
             $stmt = $this->conn->prepare($sql);
+            $time = time();
+            $stmt->bind_param('ss',$time,$conditionValue);
             $stmt->execute();
             return true;
         } catch (Exception $e) {
-            return false;
+            return $e;
         }
     }
     

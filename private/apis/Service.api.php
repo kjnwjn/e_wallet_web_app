@@ -128,6 +128,7 @@ class ServiceApi extends Controller
                 'status' => true,
                 'header_status_code' => 200,
                 'msg' => 'Recharge successfully!',
+                'redirect' => getenv('BASE_URL')  . 'transactionHistory'
             ));
         } else {
             $this->middleware->json_send_response(500, array(
@@ -218,7 +219,7 @@ class ServiceApi extends Controller
                     'status' => true,
                     'header_status_code' => 200,
                     'msg' => 'We have sent an email that contain your OTP to complete this transaction, check it now!',
-                    'redirect' => getenv('BASE_URL') . 'service/confirm-OTP/'
+                    'redirect' => getenv('BASE_URL') . 'confirmOTPTrans/'
                 )) ;
             }else{
                 $this->middleware->error_handler(500,[
@@ -310,7 +311,7 @@ class ServiceApi extends Controller
                     'status' => true,
                     'header_status_code' => 200,
                     'msg' => 'Withdraw money transaction successfully!',
-                    'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+                    'redirect' => getenv('BASE_URL')  . 'transactionHistory',
                 )): $this->middleware->json_send_response(500, array(
                     'status' => false,
                     'header_status_code' => 500,
@@ -322,7 +323,7 @@ class ServiceApi extends Controller
                     'status' => true,
                     'header_status_code' => 200,
                     'msg' => 'Your transaction is pendding!',
-                    'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+                    'redirect' => getenv('BASE_URL')  . 'transactionHistory' ,
                 ));
             }else{
                 $this->middleware->json_send_response(500, array(
@@ -397,7 +398,7 @@ class ServiceApi extends Controller
                             'status' => true,
                             'header_status_code' => 200,
                             'msg' => 'Your transaction is pendding! ',
-                            'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+                            'redirect' => getenv('BASE_URL')  . 'transactionHistory',
                         ));
                     }else{
                         $isUpdateWalletUser = $this->model('account')->UPDATE_ONE(array('email' =>$email),array('wallet'=>$userInfor['wallet'] - $totalForUser));             
@@ -526,7 +527,7 @@ class ServiceApi extends Controller
                                 'status' => true,
                                 'header_status_code' => 200,
                                 'msg' => 'Transfer money successfully!',
-                                'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+                                'redirect' => getenv('BASE_URL')  . 'transactionHistory',
                             ))
                             : $this->middleware->json_send_response(500, array(
                                 'status' => false,
@@ -632,7 +633,8 @@ class ServiceApi extends Controller
                 'status' => false,
                 'header_status_code' => 500,
                 'debug' => 'Service API function buyPhoneCard(insert)',
-                'msg' => 'An error occurred while processing, please try again!'
+                'msg' => 'An error occurred while processing, please try again!',
+                'error' => $inserted
             )): null;
             foreach($arrayPhoneCardCode as $key => $value){
                 $inserted = $this->model('phonecard')->INSERT(array(
@@ -648,7 +650,8 @@ class ServiceApi extends Controller
                     'status' => false,
                     'header_status_code' => 500,
                     'debug' => 'Service API function buyPhoneCard(insert)',
-                    'msg' => 'An error occurred while processing, please try again!'
+                    'msg' => 'An error occurred while processing, please try again!',
+                    'error' => $inserted
                 )): null;
             }
             !$this->model('Account')->UPDATE_ONE(array('email' => $userInfor['email']), array('wallet' => $userInfor['wallet'] - $total)) 
@@ -661,7 +664,8 @@ class ServiceApi extends Controller
                 'status' => true,
                 'header_status_code' => 200,
                 'msg' => 'Transfer money successfully!',
-                'redirect' => getenv('BASE_URL')  . 'translationHistory'. '/' . 'id/'. $transaction_id ,
+                // 'redirect' => getenv('BASE_URL')  . 'transactionHistory' ,
+                'error' => $inserted
             ));
 
         }

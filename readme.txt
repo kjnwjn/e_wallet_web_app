@@ -18,14 +18,4 @@ Chọn loại tài khoản :
 Loại giao dịch(action)
 0 : pending (money > 5000000)
 1 : ok
-2 : cancel or don't have enough money
-
-
-need to complete
-1: confirm OTP
-
-bug : 
-1: confirm transacton cần gửi cho người dùng 1 mail xác nhận
-2: fix response admin
-
-
+2 : cancel

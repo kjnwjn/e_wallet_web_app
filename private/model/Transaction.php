@@ -16,6 +16,13 @@ class Transaction extends DB
         $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
         return $result ? $result : array();
     }
+    function SELECT_ORDER_BY_DESC($condition = '', $conditionValue = '',$fieldValue = '')
+    {
+        $sql = 'SELECT * from `transaction` WHERE '. $condition . ' = "' . $conditionValue . '" ORDER BY `'.$fieldValue . '` DESC';
+        $stmt = $this->conn->query($sql);
+        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        return $result ? $result : array();
+    }
    
     function SELECT_INNER_JOIN($column = [],$table = '',$condition ='')
     {
@@ -54,15 +61,34 @@ class Transaction extends DB
         $field_name = implode(',', $key_field);
 
         try {
-            $sql = 'INSERT INTO transaction (' . $field_name . ') VALUES (' . $value . ')';
-            $stmt = $this->conn->prepare($sql);
+            if($field['type_transaction'] == '1'){
+                $sql = 'INSERT INTO transaction (' . $field_name . ') VALUES (?,?,?,?,?,?,?,?)';
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param('ssssssss',$field['transaction_id'],$field['email'],$field['type_transaction'],
+                $field['value_money'],$field['createdAt'],$field['updatedAt'],$field['action'],$field['card_id']);
+            }else if($field['type_transaction'] == '2'){
+                $sql = 'INSERT INTO transaction (' . $field_name . ') VALUES (?,?,?,?,?,?,?,?,?,?)';
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param('ssssssssss',$field['transaction_id'],$field['email'],$field['phoneRecipient'],
+                $field['type_transaction'],$field['value_money'],$field['description'],$field['costBearer'],$field['createdAt'],$field['updatedAt'],$field['action']);
+            }else if($field['type_transaction'] == '3'){
+                $sql = 'INSERT INTO transaction (' . $field_name . ') VALUES (?,?,?,?,?,?,?,?)';
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param('ssssssss',$field['transaction_id'],$field['email'],$field['type_transaction'],
+                $field['value_money'],$field['description'],$field['createdAt'],$field['updatedAt'],$field['action']);
+            }else if($field['type_transaction'] == '4'){
+                $sql = 'INSERT INTO `transaction` (' . $field_name . ') VALUES (?,?,?,?,?,?)';
+                $stmt = $this->conn->prepare($sql);
+                $stmt->bind_param('ssssss',$field['email'],$field['transaction_id'],$field['type_transaction'],
+                $field['value_money'],$field['createdAt'],$field['updatedAt']);
+            }
             if(!$stmt){
-                echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
+                return "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
              }
             $stmt->execute();
             return true;
         } catch (Exception $e) {
-            return false;
+            return  false;
         }
     }
 
@@ -75,18 +101,18 @@ class Transaction extends DB
             $conditionValue = $conditions[$conditionName];
             $toUpdateName = array_keys($toUpdate)[0];
             $newValue = $toUpdate[$toUpdateName];
-            $sql = 'UPDATE transaction SET ' . $toUpdateName . ' = "' . $newValue . '" WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE transaction SET ' . $toUpdateName . ' = ? WHERE ' . $conditionName . ' = ?';
             $stmt = $this->conn->prepare($sql);
-            if(!$stmt){
-                echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
-             }
+            $stmt->bind_param('ss',$newValue,$conditionValue);
             $stmt->execute();
-            $sql = 'UPDATE transaction SET updatedAt = ' . time() . ' WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE transaction SET updatedAt = ? WHERE ' . $conditionName . ' = ?';
             $stmt = $this->conn->prepare($sql);
+            $time = time();
+            $stmt->bind_param('ss',$time,$conditionValue);
             $stmt->execute();
             return true;
         } catch (Exception $e) {
-            return false;
+            return $e;
         }
     }
     

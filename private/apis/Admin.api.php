@@ -207,7 +207,7 @@ class AdminApi extends Controller
             ));
     }
 
-    function cancelAccount()
+    function cancelAccount($phoneNumber)
     {
         (!isset($phoneNumber) || empty($phoneNumber)) ? $this->middleware->json_send_response(200, array(
             'status' => false,
@@ -334,7 +334,6 @@ class AdminApi extends Controller
                     'msg' => 'Load List User successfully!',
                     'data' => $transWithdraw,
                 ));
-                print_r($transWithdraw);
                 break;
             case 'phonecard':
                 $transPhonecard = [];
@@ -353,7 +352,6 @@ class AdminApi extends Controller
                     'msg' => 'Load List User successfully!',
                     'data' => $transPhonecard,
                 ));
-                print_r($transPhonecard);
                 break;
             
             case '':
@@ -694,7 +692,8 @@ class AdminApi extends Controller
                 'status' => false,
                 'header_status_code' => 500,
                 'debug' => 'Admin API function confirmTransaction(condition)',
-                'msg' => 'An error occurred while processing, please try again!'
+                'msg' => 'An error occurred while processing, please try again!',
+                'data' => $condition1,$condition2
             ));
         }
     }

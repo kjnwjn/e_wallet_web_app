@@ -13,6 +13,9 @@
     <!-- font awesome js -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
      <!-- Alertify JS -->
+     <link rel="icon" 
+     type="image/png" 
+     href="../../public/assest/img/icon.png">
     <link rel="stylesheet" href="<?= getenv('BASE_URL') ?>style.css">
     <title>
         <?= isset($data['title']) ? $data['title'] : 'Document' ?>
@@ -124,7 +127,6 @@
         </div>
 
     </div>
-        <!-- <script type="module" src="<?= getenv('BASE_URL') ?>main.js"></script> -->
         <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>

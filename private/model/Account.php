@@ -15,8 +15,11 @@ class Account extends DB
         $field_name = implode(',', $key_field);
 
         try {
-            $sql = 'INSERT INTO account (' . $field_name . ') VALUES (' . $value . ')';
+            $sql = 'INSERT INTO account (' . $field_name . ') VALUES (?,?,?,?,?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('sssssssssss',
+            $field['email'],$field['phoneNumber'],$field['fullname'],$field['gender'],$field['address'],$field['birthday'],
+            $field['initialPassword'],$field['idCard_front'],$field['idCard_back'],$field['createdAt'],$field['updatedAt']);
             $stmt->execute();
             return true;
         } catch (Exception $e) {
@@ -43,9 +46,17 @@ class Account extends DB
 
     function SELECT_ORDER_BY_ASC($condition = '', $conditionValue = '',$fieldValue = '')
     {
-        $sql = 'SELECT * from `account` WHERE '. $condition . ' = "' . $conditionValue . '" ORDER BY `'.$fieldValue . '` ASC';
-        $stmt = $this->conn->query($sql);
-        $result = mysqli_fetch_all($stmt, MYSQLI_ASSOC);
+        // $sql = 'SELECT * from `account` WHERE '. $condition . ' = "' . $conditionValue . '" ORDER BY `'.$fieldValue . '` ASC';
+        $sql = 'SELECT * from `account` WHERE ? = ? ORDER BY ? ASC';
+        $stmt = $this->conn->prepare($sql);
+        $stmt ->bind_param("sss",$condition, $conditionValue, $fieldValue);
+
+        if(!$stmt->execute()){
+            die('Can not select : ' . $stmt->error);
+        }else{
+            $result = $stmt->get_result();
+        }
+        
         return $result ? $result : array();
     }
     function SELECT_ORDER_BY_DESC($condition = '', $conditionValue = '',$fieldValue = '')
@@ -71,11 +82,14 @@ class Account extends DB
             $conditionValue = $conditions[$conditionName];
             $toUpdateName = array_keys($toUpdate)[0];
             $newValue = $toUpdate[$toUpdateName];
-            $sql = 'UPDATE account SET ' . $toUpdateName . ' = "' . $newValue . '" WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE account SET ' . $toUpdateName . ' = ? WHERE ' . $conditionName . ' = ?';
             $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('ss',$newValue,$conditionValue);
             $stmt->execute();
-            $sql = 'UPDATE account SET updatedAt = ' . time() . ' WHERE ' . $conditionName . ' = "' . $conditionValue . '"';
+            $sql = 'UPDATE account SET updatedAt = ? WHERE ' . $conditionName . ' = ?';
             $stmt = $this->conn->prepare($sql);
+            $time = time();
+            $stmt->bind_param('ss',$time,$conditionValue);
             $stmt->execute();
             return true;
         } catch (Exception $e) {

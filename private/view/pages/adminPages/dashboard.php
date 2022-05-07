@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid ">
     <div class="row">
         <div class="col-lg-6 p-3">
             <canvas class= "" id="myChart"></canvas>

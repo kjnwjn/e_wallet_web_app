@@ -1,31 +1,25 @@
 <?php
 require_once('./private/core/jwt/vendor/autoload.php');
 require_once('./private/middlewares/Api.middleware.php');
-
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-class Home extends Controller
+class ConfirmOtpTrans extends Controller
 {
-
     function __construct()
     {
         $this->middleware = new ApiMiddleware();
-        
-    }
-    function default()
-    {
         $payload = $this->middleware->jwt_get_payload();
-        if($payload) {   
+        if(!$payload) {   
             $this->view('Layout', array(
-                'title' => 'Home',
-                'page' => 'home',
-                'respone' => $payload
+            'title' => '404 Not Found',
+            'page' => '404'
             ));
             die();
         };
-        $this->view('Layout', array(
-            'title' => 'Home',
-            'page' => 'home'
+    }
+    function default()
+    {
+        $this->view('layoutValidate', array(
+            'title' => 'Confirm Otp',
+            'page' => 'ConfirmOtpTrans'
         ));
     }
 }

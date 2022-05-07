@@ -7,7 +7,7 @@ class ConfirmOtp extends Controller
     {
         $this->middleware = new ApiMiddleware();
         $payload = $this->middleware->jwt_get_payload();
-        if($payload) {   
+        if(!$payload) {   
             $this->view('Layout', array(
             'title' => '404 Not Found',
             'page' => '404'

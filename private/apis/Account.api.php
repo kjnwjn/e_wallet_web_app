@@ -338,6 +338,7 @@ class AccountApi extends Controller
         ));
 
         // Return response to endpoint
+        // 
         if ($sendMailStatus && $inserted) {
             $this->middleware->json_send_response(200, array(
                 'status' => true,
@@ -412,7 +413,6 @@ class AccountApi extends Controller
 
     function userProfile($payload){
         $userInfor = $this->model('Account')->SELECT_ONE('email',$payload->email);
-        // var_dump($userInfor);
         try{
             $this->middleware->json_send_response(200, array(
                 'status' => true,
@@ -420,6 +420,7 @@ class AccountApi extends Controller
                 'response' => array(
                     'email' =>  $userInfor['email'],
                     'phoneNumber' => $userInfor['phoneNumber'],
+                    'gender' => $userInfor['gender'],
                     'fullname' => $userInfor['fullname'],
                     'address' => $userInfor['address'],
                     'birthday' => $userInfor['birthday'],
@@ -444,13 +445,17 @@ class AccountApi extends Controller
                 'email' =>  $userDetails['email'],
                 'phoneNumber' => $userDetails['phoneNumber'],
                 'fullname' => $userDetails['fullname'],
+                'gender' => $userDetails['gender'],
                 'address' => $userDetails['address'],
                 'birthday' => $userDetails['birthday'],
                 'idCard_back' => $userDetails['idCard_back'],
                 'idCard_front' => $userDetails['idCard_front'],
                 'wallet' => $userDetails['wallet']
             )
-        )) : $this->middleware->error_handler(404,'User not found!');
+        )) :  $this->middleware->json_send_response(200, array(
+            'status' => false,
+            'msg' => 'user does not exist!',));
+           
 
     }
 
@@ -481,6 +486,7 @@ class AccountApi extends Controller
             : $this->middleware->json_send_response(200, array(
                 'status' => true,
                 'msg' => 'Update password successfully!',
+                'redirect' => getenv('BASE_URL')
                 )
             );
         }else{
