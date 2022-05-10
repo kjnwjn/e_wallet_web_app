@@ -67,8 +67,11 @@ class AccountApi extends Controller
                 $this->middleware->authentication();
                 $this->userDetails($param);
                 break;
-            case 'test':
-                $this->test();
+            case 'upload-image':
+                $this->middleware->request_method('post');
+                $this->middleware->authentication();
+                $payload = $this->middleware->jwt_get_payload();
+                $this->uploadImage($payload);
                 break;
             default:
                 $this->middleware->json_send_response(404, array(
@@ -280,22 +283,22 @@ class AccountApi extends Controller
         ));
 
         // Validation files data
-        $filesDataErr = $this->utils()->validateFiles(($_FILES), array(
-            'idCard_front' => array(
-                'required' => true,
-                'image' => true,
-                'size' => 1, /* Maximum size in MB */
-            ),
-            'idCard_back' => array(
-                'required' => true,
-                'image' => true,
-                'size' => 1, /* Maximum size in MB */
-            ),
-        ));
+        // $filesDataErr = $this->utils()->validateFiles(($_FILES), array(
+        //     'idCard_front' => array(
+        //         'required' => true,
+        //         'image' => true,
+        //         'size' => 1, /* Maximum size in MB */
+        //     ),
+        //     'idCard_back' => array(
+        //         'required' => true,
+        //         'image' => true,
+        //         'size' => 1, /* Maximum size in MB */
+        //     ),
+        // ));
 
         // Handle error if occur
         $bodyDataErr ? $this->middleware->error_handler(200, $bodyDataErr) : null;
-        $filesDataErr ? $this->middleware->error_handler(200, $filesDataErr) : null;
+        // $filesDataErr ? $this->middleware->error_handler(200, $filesDataErr) : null;
         $emailFound =  $this->model('Account')->SELECT_ONE('email', $_POST['email']);
         $phoneNumberFound =  $this->model('Account')->SELECT_ONE('phoneNumber', $_POST['phoneNumber']);
 
@@ -304,7 +307,7 @@ class AccountApi extends Controller
         $phoneNumberFound ? $this->middleware->error_handler(200, 'This phone number was used by another account!') : null;
 
         // Initial files
-        $FILES = $this->utils()->handleUpload($_FILES, ['idCard_front', 'idCard_back']);
+        // $FILES = $this->utils()->handleUpload($_FILES, ['idCard_front', 'idCard_back']);
 
         // Start to send an email
         $initialPassword = $this->utils()->generateRandomString();
@@ -331,11 +334,19 @@ class AccountApi extends Controller
             'address' => $_POST['address'],
             'birthday' => $_POST['birthday'],
             'initialPassword' => password_hash($initialPassword, PASSWORD_DEFAULT),
-            'idCard_front' => $FILES['idCard_front']['path'],
-            'idCard_back' => $FILES['idCard_back']['path'],
             'createdAt' => time(),
             'updatedAt' => time(),
         ));
+        !$inserted ? 
+        $this->middleware->json_send_response(500, array(
+            'status' => false,
+            'header_status_code' => 500,
+            'debug' => 'Account API function register',
+            'msg' => 'An error occurred while processing, please try again!',
+            // 'data' => $inserted
+        )) : null;
+        // 'idCard_front' => $FILES['idCard_front']['path'],
+        // 'idCard_back' => $FILES['idCard_back']['path'],
 
         // Return response to endpoint
         // 
@@ -426,7 +437,8 @@ class AccountApi extends Controller
                     'birthday' => $userInfor['birthday'],
                     'idCard_back' => $userInfor['idCard_back'],
                     'idCard_front' => $userInfor['idCard_front'],
-                    'wallet' => $userInfor['wallet']
+                    'wallet' => $userInfor['wallet'],
+                    'role' => $userInfor['role']
                 )
             ));
         }catch(Exception $e){
@@ -498,7 +510,49 @@ class AccountApi extends Controller
         }
     }
 
-    function test(){
-        print_r($_POST);
+    function uploadImage($payload){
+        
+
+        // Validation files data
+        $filesDataErr = $this->utils()->validateFiles(($_FILES), array(
+            'idCard_front' => array(
+                'required' => true,
+                'image' => true,
+                'size' => 1, /* Maximum size in MB */
+            ),
+            'idCard_back' => array(
+                'required' => true,
+                'image' => true,
+                'size' => 1, /* Maximum size in MB */
+            ),
+        ));
+
+        // Handle error if occur
+        $filesDataErr ? $this->middleware->error_handler(200, $filesDataErr) : null;
+        // Initial files
+        $FILES = $this->utils()->handleUpload($_FILES, ['idCard_front', 'idCard_back']);
+
+        // Start to update to database
+        $updated = $this->model('Account')->UPDATE_IMAGE(array('email' => $payload->email),array(
+            'idCard_front' => $FILES['idCard_front']['path'],
+            'idCard_back' => $FILES['idCard_back']['path'],
+        ));
+
+        // Return response to endpoint
+        // 
+        if ($updated) {
+            $this->middleware->json_send_response(200, array(
+                'status' => true,
+                'header_status_code' => 200,
+                'msg' => 'Update image successfully! Please wait for administrator confirm your account',
+            ));
+        } else {
+            $this->middleware->json_send_response(500, array(
+                'status' => false,
+                'header_status_code' => 500,
+                'debug' => 'Account API function register',
+                'msg' => 'An error occurred while processing, please try again!'
+            ));
+        }
     }
 }

@@ -77,14 +77,18 @@ class Transaction extends DB
                 $stmt->bind_param('ssssssss',$field['transaction_id'],$field['email'],$field['type_transaction'],
                 $field['value_money'],$field['description'],$field['createdAt'],$field['updatedAt'],$field['action']);
             }else if($field['type_transaction'] == '4'){
-                $sql = 'INSERT INTO `transaction` (' . $field_name . ') VALUES (?,?,?,?,?,?)';
-                $stmt = $this->conn->prepare($sql);
-                $stmt->bind_param('ssssss',$field['email'],$field['transaction_id'],$field['type_transaction'],
-                $field['value_money'],$field['createdAt'],$field['updatedAt']);
+                $sql = 'INSERT INTO `transaction` ('  .$field_name. ') VALUES ('.$value.')';
+                $result = $this->conn->query($sql);
+                if($result){
+                    return true;
+                    die();
+                }
+               
             }
             if(!$stmt){
                 return "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
              }
+           
             $stmt->execute();
             return true;
         } catch (Exception $e) {

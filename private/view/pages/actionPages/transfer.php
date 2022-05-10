@@ -1,4 +1,3 @@
-
 <div class="container mt-5">
 
 	<header class="text-center bg-light text-primary py-3  rounded my-4">
@@ -19,7 +18,7 @@
 						<tr>
 							<td>How much ?</td>
 							<td>
-								<input id="money" name="money" type="number"  placeholder="5000000" required />
+								<input id="money" name="money" type="number" placeholder="5000000" required />
 							</td>
 						</tr>
 
@@ -44,7 +43,7 @@
 
 
 					</table>
-					<button type="submit" class="btn btn-success" onClick="actionTransfer()">Success</button>
+					<button type="submit" class="btn btn-success">Success</button>
 					<button class="btn btn-info btn-removeAll">Reset</button>
 				</form>
 			</div>
@@ -55,13 +54,13 @@
 					<img src="../../../../public/assest/img/1-male.jpg" alt="">
 				</div>
 				<div class="col-9 user-infomation">
-					<a href="<? getenv('BASE_URL')?>profile">info</a>
+					<a href="<? getenv('BASE_URL') ?>profile">info</a>
 					<p>Pham Nhat Anh</p>
 				</div>
 			</div>
 			<div>
 				<ul class="menu menu-info">
-					
+
 				</ul>
 			</div>
 		</div>
@@ -84,35 +83,36 @@
 	const urlUserProfile = 'http://localhost/api/account/profile/'
 
 	function renderData(url = '') {
-        fetch(url)
-            .then(response => response.json())
-            .then(response => {
-                if (response.status == true) {
-                    $('.user-infomation').html(`
+		fetch(url)
+			.then(response => response.json())
+			.then(response => {
+				if (response.status == true) {
+					$('.user-infomation').html(`
 						<a href="http://localhost/profile">info</a>
 						<p>${response.response.fullname}</p>
 					`)
-                    $('.menu-info').html(`
+					$('.menu-info').html(`
 						<li><span>${response.response.email}</span></li>
 						<li><span>${response.response.gender}</span></li>
 						<li><span>${response.response.address}</span></li>
 						<li><span>${response.response.wallet} .VNĐ</span></li>
 					`)
-                } 
-            })
+				}
+			})
 
-    }
-	function userDetails(){
+	}
+
+	function userDetails() {
 		fetch(urlUserDetails + $('#phoneRecipient').val())
-            .then(response => response.json())
-            .then(response => {
-                if (response.status == true) {
-                    $('.nameRecipients').html(`
+			.then(response => response.json())
+			.then(response => {
+				if (response.status == true) {
+					$('.nameRecipients').html(`
 						<td>Receiver</td>
 						<td><span class="text-success">${response.response.fullname}</span></td>
 					
 					`)
-                } else{
+				} else {
 					$('.nameRecipients').html(`
 					
 					<td>Receiver</td>
@@ -120,13 +120,12 @@
 			
 			`)
 				}
-            })
+			})
 	}
 	renderData(urlUserProfile)
-	function actionTransfer(){
-		submitformAction(url, 'POST');
-	}
-	$('.btn-removeAll').click(function(){
+	
+	submitformAction(url, 'POST');
+	$('.btn-removeAll').click(function() {
 		$('#phoneRecipient').val('')
 		$('#money').val('')
 		$('#costBearer').val('sender')

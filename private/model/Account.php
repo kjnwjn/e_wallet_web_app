@@ -15,11 +15,11 @@ class Account extends DB
         $field_name = implode(',', $key_field);
 
         try {
-            $sql = 'INSERT INTO account (' . $field_name . ') VALUES (?,?,?,?,?,?,?,?,?,?,?)';
+            $sql = 'INSERT INTO account (' . $field_name . ') VALUES (?,?,?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param('sssssssssss',
+            $stmt->bind_param('sssssssss',
             $field['email'],$field['phoneNumber'],$field['fullname'],$field['gender'],$field['address'],$field['birthday'],
-            $field['initialPassword'],$field['idCard_front'],$field['idCard_back'],$field['createdAt'],$field['updatedAt']);
+            $field['initialPassword'],$field['createdAt'],$field['updatedAt']);
             $stmt->execute();
             return true;
         } catch (Exception $e) {
@@ -96,4 +96,25 @@ class Account extends DB
             return false;
         }
     }
+
+    function UPDATE_IMAGE($conditions = [], $toUpdate = [])
+    {
+        try {
+            $conditionName = array_keys($conditions)[0];
+            $conditionValue = $conditions[$conditionName];
+            $sql = 'UPDATE account SET idCard_front = ?,idCard_back = ? WHERE ' . $conditionName . ' = ?';
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param('sss',$toUpdate['idCard_front'],$toUpdate['idCard_back'],$conditionValue);
+            $stmt->execute();
+            $sql = 'UPDATE account SET updatedAt = ? WHERE ' . $conditionName . ' = ?';
+            $stmt = $this->conn->prepare($sql);
+            $time = time();
+            $stmt->bind_param('ss',$time,$conditionValue);
+            $stmt->execute();
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
 }

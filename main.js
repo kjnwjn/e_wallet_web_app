@@ -4,6 +4,7 @@ $(document).ready(function () {
   $(".menu__icon").click(() => {
   $(".body_taskbar").toggleClass('transidebar')
   $(".main__content").toggleClass("tran__main-content")
+  
   });
   
 });
@@ -187,8 +188,9 @@ function validation_submitform(url){
 
 function submitformAction(url,method){
     form.submit(e => {
-        var data =form.serialize()
         e.preventDefault();
+        var data =form.serialize()
+        console.log(data)
         $.ajax({
             type: method,
             url: url,
@@ -209,29 +211,26 @@ function submitformAction(url,method){
         })
     })
 }
+function submitFormdata(formdata,url) {
+  
+    $.ajax({                                                                               
+            url,
+            method: 'POST',
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            data: formdata,                                                            
+            success: function (response) {   
+            if(response.status) {
+                alertify.success(response.msg);
+                if(response.redirect) {
+                    window.location.href = response.redirect;
+                }
+            }else{
+                alertify.error(response.msg);
 
+            }                                                        
+        },                                                                                 
+    });  
+}
 
-// function userDetailsRequest(url){
-//     formTransfer.submit(e => {
-       
-//         e.preventDefault();
-//         $.ajax({
-//             type: "GET",
-//             url: url,
-//             success: function (data) {
-//                 if(data.status) {
-//                     console.log(data.response)
-//                     if(data.redirect) {
-//                         window.open("http://localhost/confirm-OTP/", "_blank", "toolbar=yes,scrollbars=yes,resizable=yes,top=0,left=400,width=500,height=600");
-//                     }
-//                 }else{
-//                     console.log(data)
-//                     alertify.error(data.msg);
-//                 }
-//             },
-//             error: function (data) {
-//                 console.log(data.msg);
-//             },
-//         })
-//     })
-// }

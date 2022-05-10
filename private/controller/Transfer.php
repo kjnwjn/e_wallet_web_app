@@ -8,15 +8,12 @@ class Transfer extends Controller
 {
     function __construct(){
         $this->middleware = new ApiMiddleware();
-        $this->middleware->authentication();
         $payload = $this->middleware->jwt_get_payload();
-        !($payload) ? 
-        $this->middleware->json_send_response(200, array(
-            'status' => false,
-            "header_status_code" => 200,
-            'msg' => 'Please login first!',
-            'redirect' => getenv('BASE_URL') . 'login',
-        )) : null;
+        if(!($payload)) {
+            header('Location: '.getenv('BASE_URL').'login');
+            die();
+        } 
+         
         !($payload->role == 'actived')? 
         $this->middleware->json_send_response(404, array(
             'status' => false,

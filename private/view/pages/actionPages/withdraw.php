@@ -1,4 +1,3 @@
-
 <div class="container mt-5">
 	<header class="text-center bg-light text-primary py-3 my-4 rounded">
 		<h3 class="display-5 font-weight-bold mb-1 ">WITHDRAW</h3>
@@ -12,13 +11,13 @@
 						<tr>
 							<td>Card ID</td>
 							<td>
-								<input id="card_id" name="card_id" type="number" placeholder="111111" required  />
+								<input id="card_id" name="card_id" type="number" placeholder="111111" required />
 							</td>
 						</tr>
 						<tr>
 							<td>Expire Day</td>
 							<td>
-								<input id="expiredDay" name="expiredDay" type="text"  placeholder="14/02" required />
+								<input id="expiredDay" name="expiredDay" type="text" placeholder="14/02" required />
 							</td>
 						</tr>
 
@@ -32,7 +31,7 @@
 						<tr>
 							<td>Money</td>
 							<td>
-								<input id="money" name="money" type="number"  placeholder="500000" required />
+								<input id="money" name="money" type="number" placeholder="500000" required />
 							</td>
 						</tr>
 						<tr>
@@ -46,7 +45,7 @@
 
 
 					</table>
-					<button type="submit" class="btn btn-success" onClick="actionWithdraw()">Success</button>
+					<button type="submit" class="btn btn-success">Success</button>
 					<button class="btn btn-info btn-removeAll">Reset</button>
 				</form>
 			</div>
@@ -63,7 +62,7 @@
 			</div>
 			<div>
 				<ul class="menu menu-info">
-					
+
 				</ul>
 			</div>
 		</div>
@@ -83,34 +82,33 @@
 
 
 	function renderData(url = '') {
-        fetch(url)
-            .then(response => response.json())
-            .then(response => {
-                if (response.status == true) {
-                    $('.user-infomation').html(`
+		fetch(url)
+			.then(response => response.json())
+			.then(response => {
+				if (response.status == true) {
+					$('.user-infomation').html(`
 						<a href="http://localhost/profile">info</a>
 						<p>${response.response.fullname}</p>
 					`)
-                    $('.menu-info').html(`
+					$('.menu-info').html(`
 						<li><span>${response.response.email}</span></li>
 						<li><span>${response.response.gender}</span></li>
 						<li><span>${response.response.address}</span></li>
 						<li><span>${response.response.wallet} .VNĐ</span></li>
 					`)
-                } 
-            })
-    }
-	renderData(urlUserProfile)
-	function actionWithdraw(){
-		submitformAction(url, 'POST');
+				}
+			})
 	}
-	$('.btn-removeAll').click(function(){
+	renderData(urlUserProfile)
+	// function actionWithdraw(){
+	// }
+	submitformAction(url, 'POST');
+	$('.btn-removeAll').click(function() {
 		$('#card_id').val('')
 		$('#expiredDay').val('')
 		$('#cvv').val('')
 		$('#money').val('')
 		$('#description').val('')
-		
-	})
 
+	})
 </script>

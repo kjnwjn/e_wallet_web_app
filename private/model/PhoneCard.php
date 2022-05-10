@@ -41,6 +41,7 @@ class PhoneCard extends DB
     }
     function INSERT($field = [])
     {
+        
         $key_field = [];
         $value_field = [];
 
@@ -53,17 +54,20 @@ class PhoneCard extends DB
         $field_name = implode(',', $key_field);
 
         try {
-            $sql = 'INSERT INTO phoneCard (' . $field_name . ') VALUES (?,?,?,?,?,?,?)';
+           
+            $sql = 'INSERT INTO phonecard (' . $field_name . ') VALUES (?,?,?,?,?,?,?)';
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param('iisiiss',
-            $field['phoneCard_id'],$field['transaction_id'],$field['mno'],$field['phoneCardType'],$field['amount'],$field['createdAt'],$field['updatedAt']);
+            $stmt->bind_param('sssssss',$field['phoneCard_id'],$field['transaction_id'],$field['mno'],
+            $field['phoneCardType'],$field['amount'],$field['createdAt'],$field['updatedAt']);
+            
             if(!$stmt){
-                echo "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
-             }
+                    return "Prepare failed: (". $this->conn->error.") ".$this->conn->error."<br>";
+                 }
+           
             $stmt->execute();
             return true;
         } catch (Exception $e) {
-            return false;
+            echo $e;
         }
     }
 

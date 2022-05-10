@@ -47,26 +47,23 @@ use Firebase\JWT\Key;
                                 TRANSACTIONS HISTORY
                             </a>
                         </li>
-                      
-            
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-light mr-4"
-                        href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                       
-                            USER
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a href="<?= getenv('BASE_URL') ?>profile" class="dropdown-item" >
-                                profile
-                            </a>
-                            <a href="<?= getenv('BASE_URL') ?>changepassword" class="dropdown-item" >
-                                change password
-                            </a>
-                            <?php
-                                if(isset($_COOKIE['JWT_TOKEN'])){
+                        <li class="nav-item dropdown">
+                            
+                        <?php
+                        if(isset($_COOKIE['JWT_TOKEN'])){
+                            echo '
+                                    <a class="nav-link dropdown-toggle text-light mr-4"
+                                    href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        USER
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">';
+                                    echo("<a href='". getenv('BASE_URL') ."profile' class='dropdown-item'>Profile</a>");
+
+                                    echo("<a href='". getenv('BASE_URL') ."changepassword' class='dropdown-item'>Change Password</a>");
+
                                     echo("<a href='". getenv('BASE_URL') ."logout' class='dropdown-item'>logout</a>");
                                 } else{
-                                    echo("<a href='". getenv('BASE_URL') ."login' class='dropdown-item'>login</a>");
+                                    echo("<button type='button' class='btn btn-light'><a href='". getenv('BASE_URL') ."login' style='text-decoration:none;color:black'>Login</a></button>");
                                 }
                             ?>
                         </div>

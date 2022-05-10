@@ -21,7 +21,7 @@
         <div class="table-responsive table-data_admin">
             <table id="table__details" class="table table-bordered table-striped mt-0">
                 <thead id="thead__details">
-    
+
                 </thead>
                 <tbody id="tbody__details">
                 </tbody>
@@ -51,7 +51,7 @@
                                 <tbody id="phoneCard-tbody">
                                 </tbody>
                             </table>
-                            
+
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -60,8 +60,8 @@
                 </div>
             </div>
         </div>
-    
-        <nav aria-label="Page navigation example">
+
+        <nav aria-label="dataTables_paginate paging_simple_numbers">
             <ul class="pagination">
                 <li class="page-item"><a class="page-link" href="#">Previous</a></li>
                 <li class="page-item"><a class="page-link" href="#">1</a></li>
@@ -70,14 +70,15 @@
                 <li class="page-item"><a class="page-link" href="#">Next</a></li>
             </ul>
         </nav>
+
     </div>
-    
+
 </div>
-<!-- <s
-ipt src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
 <script>
     const urlAllTransaction = 'http://localhost/api/transaction/transaction-histories/'
     const urlDetailTransaction = 'http://localhost/api/transaction/transaction-detail/'
@@ -119,13 +120,13 @@ ipt src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
                             transactionName = 'recharge transaction'
                         }
 
-                        if(element.action == 1){
+                        if (element.action == 1) {
                             colorActionClass = 'success'
                             actionValue = 'success'
-                        }else if(element.action == 2){
+                        } else if (element.action == 2) {
                             colorActionClass = 'danger'
                             actionValue = 'failed'
-                        }else{
+                        } else {
                             colorActionClass = 'primary'
                             actionValue = 'pending'
                         }
@@ -220,7 +221,7 @@ ipt src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
                                     console.log('error')
                                 }
                             })
-                    }else if(trans.type_transaction == "1"){
+                    } else if (trans.type_transaction == "1") {
                         $('#transaction-thead').html(`
                             <th scope="col">transaction id</th>
                             <th scope="col">transaction type</th>
@@ -245,7 +246,7 @@ ipt src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
                         `)
                         $('#phoneCard-thead').html(``)
                         $('#phoneCard-tbody').html(``)
-                    }else if(trans.type_transaction == "2"){
+                    } else if (trans.type_transaction == "2") {
                         $('#transaction-thead').html(`
                             <th scope="col">transaction id</th>
                             <th scope="col">type_transaction</th>
@@ -270,7 +271,7 @@ ipt src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
                         `)
                         $('#phoneCard-thead').html(``)
                         $('#phoneCard-tbody').html(``)
-                    }else{
+                    } else {
                         $('#transaction-thead').html(`
                             <th scope="col">transaction id</th>
                             <th scope="col">type_transaction</th>
@@ -296,7 +297,7 @@ ipt src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script> -->
             })
     }
 
-    function createdTime(time){
+    function createdTime(time) {
         const createdTime = new Date(time * 1000)
         const createdString = createdTime.getDate() +
             "/" + (createdTime.getMonth() + 1) +
