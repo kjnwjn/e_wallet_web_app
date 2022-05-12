@@ -19,3 +19,8 @@ Loại giao dịch(action)
 0 : pending (money > 5000000)
 1 : ok
 2 : cancel
+
+
+
+BUG :
+Gửi tiền âm

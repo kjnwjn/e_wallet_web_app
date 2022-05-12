@@ -13,11 +13,11 @@ class Dashboard extends Controller
     {
         $this->middleware = new ApiMiddleware();
         $payload = $this->middleware->jwt_get_payload();
-        !$payload ? header('Location: http://localhost/login') : null;
         if($payload && $payload->phoneNumber != 'admin') {   
-            $this->view('Layout', array(
-            'title' => '404 Not Found',
-            'page' => '404'
+            $this->view('LayoutError', array(
+                'title' => 'Forbidden',
+                'error_code' => '403',
+                'error_Content' => 'FORBIDDEN. YOU DO NOT HAVE PERMISSION TO ACCESS THIS PAGE.'
             ));
             die();
         };

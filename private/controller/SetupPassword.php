@@ -13,9 +13,10 @@ class SetupPassword extends Controller
         $userInfor = $this->model('Account')->SELECT_ONE('phoneNumber',$payload->phoneNumber);
       
         if($userInfor['initialPassword'] == null) {   
-            $this->view('Layout', array(
-            'title' => '404 Not Found',
-            'page' => '404'
+            $this->view('LayoutError', array(
+                'title' => 'Forbidden',
+                'error_code' => '403',
+                'error_Content' => 'FORBIDDEN. YOU DO NOT HAVE PERMISSION TO ACCESS THIS PAGE.'
             ));
             die();
         };

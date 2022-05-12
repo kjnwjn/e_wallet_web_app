@@ -18,7 +18,7 @@
 						<tr>
 							<td>How much ?</td>
 							<td>
-								<input id="money" name="money" type="number" placeholder="5000000" required />
+								<input id="money" name="money" type="number" min=0 placeholder="5000000" required />
 							</td>
 						</tr>
 

@@ -47,9 +47,10 @@ use Firebase\JWT\Key;
                                 TRANSACTIONS HISTORY
                             </a>
                         </li>
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown ">
                             
                         <?php
+                       
                         if(isset($_COOKIE['JWT_TOKEN'])){
                             echo '
                                     <a class="nav-link dropdown-toggle text-light mr-4"
@@ -63,7 +64,8 @@ use Firebase\JWT\Key;
 
                                     echo("<a href='". getenv('BASE_URL') ."logout' class='dropdown-item'>logout</a>");
                                 } else{
-                                    echo("<button type='button' class='btn btn-light'><a href='". getenv('BASE_URL') ."login' style='text-decoration:none;color:black'>Login</a></button>");
+                                   echo("<button type='button' class='btn btn-light'><a href='". getenv('BASE_URL') ."login' style='text-decoration:none;color:black'>Login</a></button>");
+                                   echo("<button type='button' class='btn btn-success'><a href='". getenv('BASE_URL') ."register' style='text-decoration:none;color:white;'>Register</a></button>");
                                 }
                             ?>
                         </div>
