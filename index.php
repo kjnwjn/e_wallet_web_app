@@ -1,8 +1,8 @@
 <?php
 
 session_start();
-require_once('./private/core/DevCode.php');
-require_once('./private/Bridge.php');
+set_include_path('./private/core/DevCode.php');
+set_include_path('./private/Bridge.php');
 
 use DevCoder\DotEnv;
 
