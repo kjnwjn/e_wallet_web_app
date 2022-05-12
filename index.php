@@ -6,6 +6,6 @@ set_include_path('./private/Bridge.php');
 
 use DevCoder\DotEnv;
 
-(new DotEnv(__DIR__ . '/.env'))->load();
+(new DotEnv( './.env'))->load();
 
 $myApp = new App();
