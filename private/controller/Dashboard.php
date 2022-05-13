@@ -1,5 +1,5 @@
 <?php
-require_once('./private/core/jwt/vendor/autoload.php');
+require_once('./vendor/autoload.php');
 require_once('./private/middlewares/Api.middleware.php');
 
 use Firebase\JWT\JWT;

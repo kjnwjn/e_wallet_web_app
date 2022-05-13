@@ -1,7 +1,5 @@
 <?php
-require_once('./private/core/phpmailer/PHPMailer.php');
-require_once('./private/core/phpmailer/SMTP.php');
-require_once('./private/core/phpmailer/Exception.php');
+require './vendor/autoload.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
