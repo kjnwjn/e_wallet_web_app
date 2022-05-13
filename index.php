@@ -4,7 +4,11 @@ require './private/bridge.php';
 
 use DevCoder\DotEnv;
 
-(new DotEnv( './.env'))->load();
+try {
+    (new DotEnv( './.env'))->load();
+} catch(Exception){
+
+}
 
 session_start();
 
