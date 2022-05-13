@@ -2,5 +2,10 @@
     "name": "truonggiangit793/cnpm",
     "description": "CNPM",
     "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Truonggiangit793\\Cnpm\\": "src/"
+        }
+    },
     "require": {}
 }
